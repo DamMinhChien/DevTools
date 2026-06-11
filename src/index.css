@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 115%; /* Tăng cỡ chữ tổng thể lên cho to hơn */
+  }
+  :root {
+    --background: 210 40% 96%; /* Sightly darker background for better card contrast */
+    --foreground: 222 47% 11%;
+ 
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+ 
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 91%; /* More distinct muted bg */
+    --muted-foreground: 215.4 16.3% 40%; /* Darker muted text */
+ 
+    --accent: 210 40% 93%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 214 32% 88%;
+    --input: 214 32% 88%;
+    --ring: 221.2 83.2% 53.3%;
+ 
+    --radius: 1rem; /* More modern radius */
+  }
+
+  .dark {
+    --background: 222 47% 6%; /* Deeper dark background */
+    --foreground: 210 40% 98%;
+ 
+    --card: 222 47% 10%; /* More distinct dark card */
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222 47% 10%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 15%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 217.2 32.6% 15%;
+    --muted-foreground: 215 20.2% 75%;
+ 
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217.2 32.6% 15%;
+    --input: 217.2 32.6% 15%;
+    --ring: 224.3 76.3% 48%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Sonner Loading Toast Custom Styles */
+[data-sonner-toast][data-type="loading"] {
+  background-color: #fefce8 !important; /* yellow-50 */
+  color: #854d0e !important;           /* yellow-800 */
+  border-color: #fde047 !important;    /* yellow-300 */
+}
+
+[data-sonner-toast][data-type="loading"] [data-spinner] {
+  border-color: #ca8a04 !important;    /* yellow-600 */
+  border-top-color: transparent !important;
+}

@@ -1,0 +1,19 @@
+# DevTools .cgcignore
+node_modules/
+dist/
+dist-ssr/
+.vite/
+.npm/
+coverage/
+storybook-static/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.idea/
+.git/
+logs/
+*.log
+.env
+.env.*
+!.env.example
+
