@@ -25,6 +25,13 @@ function App() {
   // Apply responsive default states
   useResponsiveSidebar();
 
+  // Close sidebar on mobile after navigation
+  const handleNavClick = () => {
+    if (window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
+  };
+
   // Swipe handlers for mobile
   const swipeHandlers = useSwipeable({
     onSwipedRight: () => setSidebarOpen(true),
@@ -134,6 +141,7 @@ function App() {
           {/* Brand Header */}
           <Link 
             to="/"
+            onClick={handleNavClick}
             className={`px-4 mb-6 flex items-center cursor-pointer hover:opacity-80 transition-opacity overflow-hidden whitespace-nowrap ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
           >
             <motion.div layout className="w-8 h-8 shrink-0 bg-primary rounded flex items-center justify-center">
@@ -161,6 +169,7 @@ function App() {
             
             <Link
               to="/"
+              onClick={handleNavClick}
               className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors mb-4 group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
               activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
               inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
@@ -225,6 +234,7 @@ function App() {
                           <SimpleTooltip content={tool.name} side="right" key={tool.id}>
                             <Link
                               to={`/${tool.id}` as any}
+                              onClick={handleNavClick}
                               className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
                               activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
                               inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
