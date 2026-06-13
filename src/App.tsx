@@ -8,6 +8,7 @@ import { Link, Outlet, useLocation } from "@tanstack/react-router";
 function App() {
   const { theme, setTheme, isSidebarOpen, toggleSidebar } = useAppStore();
   const location = useLocation();
+  const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || "admin@example.com";
 
   // Handle Dark mode sync
   useEffect(() => {
@@ -260,7 +261,7 @@ function App() {
           {/* Feedback / Contact */}
           <div className="p-4 border-t border-border mt-auto shrink-0">
             <a 
-              href="mailto:damminhchien220204@gmail.com?subject=[DevTools] Góp ý tính năng / Báo lỗi&body=Xin chào Admin,%0A%0ATôi muốn báo lỗi hoặc góp ý về tính năng...%0A%0A[Vui lòng nhập mô tả chi tiết tại đây]"
+              href={`mailto:${contactEmail}?subject=[DevTools] Góp ý tính năng / Báo lỗi&body=Xin chào Admin,%0A%0ATôi muốn báo lỗi hoặc góp ý về tính năng...%0A%0A[Vui lòng nhập mô tả chi tiết tại đây]`}
               className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group text-muted-foreground hover:bg-primary/10 hover:text-primary ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
               title="Gửi Email Góp ý"
               target="_blank"
