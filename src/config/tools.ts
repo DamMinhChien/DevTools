@@ -17,19 +17,10 @@ export interface Category {
 
 export const toolCategories: Category[] = [
   {
-    id: "developer",
-    name: "Công cụ Lập trình",
-    icon: "terminal",
+    id: "network",
+    name: "Mạng & API",
+    icon: "cloud",
     tools: [
-      {
-        id: "code-formatter",
-        name: "Code Formatter",
-        description: "Format và làm đẹp code JSON, JS, TS, HTML, CSS, Markdown. Hỗ trợ dán code hoặc tải file.",
-        icon: "format_align_left",
-        color: "bg-violet-500",
-        disabled: false,
-        keywords: ["format", "prettier", "code", "json", "javascript", "typescript", "html", "css", "markdown", "làm đẹp"]
-      },
       {
         id: "api-tester",
         name: "Postboy",
@@ -38,57 +29,6 @@ export const toolCategories: Category[] = [
         color: "bg-cyan-500",
         disabled: false,
         keywords: ["api", "postman", "request", "http", "fetch", "axios", "tester", "test", "postboy"]
-      },
-      {
-        id: "json-query-converter",
-        name: "JSON ↔ Query String",
-        description: "Chuyển đổi 2 chiều giữa chuỗi JSON và URL Query String.",
-        icon: "sync_alt",
-        color: "bg-teal-500",
-        disabled: false,
-        keywords: ["json", "query", "string", "url", "params", "convert", "chuyển đổi"]
-      },
-      {
-        id: "timestamp-converter",
-        name: "Unix Timestamp",
-        description: "Chuyển đổi qua lại giữa Unix Timestamp và Ngày giờ.",
-        icon: "schedule",
-        color: "bg-rose-500",
-        disabled: false,
-        keywords: ["time", "timestamp", "unix", "epoch", "date", "ngày giờ"]
-      },
-      {
-        id: "regex-tester",
-        name: "Kiểm tra Regex",
-        description: "Kiểm tra và kiểm thử biểu thức chính quy (Regular Expressions).",
-        icon: "regular_expression",
-        color: "bg-purple-500",
-        disabled: false,
-        keywords: ["regex", "biểu thức", "chính quy", "test", "match"]
-      }
-    ]
-  },
-  {
-    id: "generators",
-    name: "Trình Tạo Dữ Liệu",
-    icon: "autorenew",
-    tools: [
-      {
-        id: "hash-generator",
-        name: "Hash Generator",
-        description: "Tạo mã băm MD5, SHA-1, SHA-256, SHA-512 tức thì.",
-        icon: "tag",
-        color: "bg-pink-500",
-        disabled: false,
-        keywords: ["hash", "md5", "sha", "băm", "generator", "tạo"]
-      },
-      {
-        id: "uuid-generator",
-        name: "UUID Generator",
-        description: "Sinh mã UUID v4 và v7 ngẫu nhiên với nhiều định dạng.",
-        icon: "fingerprint",
-        color: "bg-teal-500",
-        disabled: false,
       },
       {
         id: "request-builder",
@@ -102,9 +42,59 @@ export const toolCategories: Category[] = [
     ]
   },
   {
+    id: "formatters",
+    name: "Trình Định Dạng",
+    icon: "format_paint",
+    tools: [
+      {
+        id: "code-formatter",
+        name: "Code Formatter",
+        description: "Format và làm đẹp code JSON, JS, TS, HTML, CSS, Markdown. Hỗ trợ dán code hoặc tải file.",
+        icon: "format_align_left",
+        color: "bg-violet-500",
+        disabled: false,
+        keywords: ["format", "prettier", "code", "json", "javascript", "typescript", "html", "css", "markdown", "làm đẹp"]
+      }
+    ]
+  },
+  {
+    id: "converters",
+    name: "Trình Chuyển Đổi",
+    icon: "sync_alt",
+    tools: [
+      {
+        id: "json-query-converter",
+        name: "JSON ↔ Query String",
+        description: "Chuyển đổi 2 chiều giữa chuỗi JSON và URL Query String.",
+        icon: "transform",
+        color: "bg-teal-500",
+        disabled: false,
+        keywords: ["json", "query", "string", "url", "params", "convert", "chuyển đổi"]
+      },
+      {
+        id: "timestamp-converter",
+        name: "Unix Timestamp",
+        description: "Chuyển đổi qua lại giữa Unix Timestamp và Ngày giờ.",
+        icon: "schedule",
+        color: "bg-rose-500",
+        disabled: false,
+        keywords: ["time", "timestamp", "unix", "epoch", "date", "ngày giờ", "convert"]
+      },
+      {
+        id: "case-converter",
+        name: "Case Converter",
+        description: "Chuyển đổi văn bản sang CamelCase, SnakeCase, v.v...",
+        icon: "text_fields",
+        color: "bg-blue-500",
+        disabled: false,
+        keywords: ["case", "chữ hoa", "chữ thường", "camelcase", "snakecase", "kebabcase", "convert"]
+      }
+    ]
+  },
+  {
     id: "encoders",
     name: "Mã hóa & Giải mã",
-    icon: "code",
+    icon: "lock",
     tools: [
       {
         id: "base64",
@@ -136,19 +126,34 @@ export const toolCategories: Category[] = [
     ]
   },
   {
-    id: "text",
-    name: "Công cụ Văn bản",
-    icon: "subject",
+    id: "generators",
+    name: "Trình Tạo Dữ Liệu",
+    icon: "autorenew",
     tools: [
       {
-        id: "case-converter",
-        name: "Case Converter",
-        description: "Chuyển đổi văn bản sang CamelCase, SnakeCase, v.v...",
-        icon: "text_fields",
-        color: "bg-blue-500",
+        id: "hash-generator",
+        name: "Hash Generator",
+        description: "Tạo mã băm MD5, SHA-1, SHA-256, SHA-512 tức thì.",
+        icon: "tag",
+        color: "bg-pink-500",
         disabled: false,
-        keywords: ["case", "chữ hoa", "chữ thường", "camelcase", "snakecase", "kebabcase"]
+        keywords: ["hash", "md5", "sha", "băm", "generator", "tạo"]
       },
+      {
+        id: "uuid-generator",
+        name: "UUID Generator",
+        description: "Sinh mã UUID v4 và v7 ngẫu nhiên với nhiều định dạng.",
+        icon: "fingerprint",
+        color: "bg-teal-500",
+        disabled: false,
+      }
+    ]
+  },
+  {
+    id: "text",
+    name: "Văn bản & Tiện ích",
+    icon: "subject",
+    tools: [
       {
         id: "diff-checker",
         name: "Diff Checker",
@@ -157,6 +162,15 @@ export const toolCategories: Category[] = [
         color: "bg-indigo-500",
         disabled: false,
         keywords: ["diff", "so sánh", "khác biệt", "compare", "text"]
+      },
+      {
+        id: "regex-tester",
+        name: "Kiểm tra Regex",
+        description: "Kiểm tra và kiểm thử biểu thức chính quy (Regular Expressions).",
+        icon: "regular_expression",
+        color: "bg-purple-500",
+        disabled: false,
+        keywords: ["regex", "biểu thức", "chính quy", "test", "match"]
       }
     ]
   }
