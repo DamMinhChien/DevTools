@@ -1,5 +1,9 @@
 # DevTools
 
+🌍 **Live Demo:** 
+- [https://devtoools.tech](https://devtoools.tech)
+- [https://dev-tools-chi-one.vercel.app](https://dev-tools-chi-one.vercel.app/)
+
 Dự án này là một ứng dụng Single Page Application (SPA) được xây dựng bằng React và TypeScript, sử dụng Vite làm công cụ build. Mục đích chính của dự án là cung cấp một bộ khung (template) tinh gọn để bạn có thể tự xây dựng và quản lý các công cụ (tools) hỗ trợ công việc cá nhân.
 
 ## Các công nghệ cốt lõi
