@@ -117,12 +117,15 @@ function App() {
               dragConstraints={{ left: -100, right: 0 }}
               dragElastic={0}
               onDragEnd={(_, info) => {
-                if (info.offset.x < -30) {
+                if (info.offset.x < -20) {
                   setSidebarOpen(false);
                 }
               }}
-              className="absolute -right-1 top-0 w-3 h-full cursor-col-resize hover:bg-primary/30 transition-colors z-50 hidden md:block"
-            />
+              className="absolute -right-2 top-0 w-4 h-full cursor-col-resize flex items-center justify-center group z-50 hidden md:flex"
+            >
+              {/* Visual indicator line */}
+              <div className="w-1 h-12 bg-border/50 group-hover:bg-primary rounded-full transition-colors" />
+            </motion.div>
           )}
 
           {/* Brand Header */}
