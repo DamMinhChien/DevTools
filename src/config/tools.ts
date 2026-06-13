@@ -83,6 +83,31 @@ export const toolCategories: Category[] = [
         keywords: ["jwt", "token", "decode", "giải mã", "json web token", "auth"]
       }
     ]
+  },
+  {
+    id: "developer",
+    name: "Công cụ Lập trình",
+    icon: "terminal",
+    tools: [
+      {
+        id: "code-formatter",
+        name: "Code Formatter",
+        description: "Format và làm đẹp code JSON, JS, TS, HTML, CSS, Markdown. Hỗ trợ dán code hoặc tải file.",
+        icon: "format_align_left",
+        color: "bg-violet-500",
+        disabled: false,
+        keywords: ["format", "prettier", "code", "json", "javascript", "typescript", "html", "css", "markdown", "làm đẹp"]
+      },
+      {
+        id: "regex-tester",
+        name: "Kiểm tra Regex",
+        description: "Kiểm tra và kiểm thử biểu thức chính quy (Regular Expressions).",
+        icon: "regular_expression",
+        color: "bg-purple-500",
+        disabled: true,
+        keywords: ["regex", "biểu thức", "chính quy", "test", "match"]
+      }
+    ]
   }
 ];
 

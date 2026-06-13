@@ -10,6 +10,7 @@ import DiffChecker from "./pages/text/diff-checker";
 import Base64Converter from "./pages/encoders/base64";
 import HashGenerator from "./pages/encoders/hash-generator";
 import JwtDecoder from "./pages/encoders/jwt";
+import CodeFormatter from "./pages/formatter";
 
 // Create root route with App as component
 const rootRoute = createRootRoute({
@@ -53,6 +54,12 @@ const jwtRoute = createRoute({
   component: JwtDecoder,
 });
 
+const codeFormatterRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/code-formatter",
+  component: CodeFormatter,
+});
+
 // Build route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -61,6 +68,7 @@ const routeTree = rootRoute.addChildren([
   base64Route,
   hashGeneratorRoute,
   jwtRoute,
+  codeFormatterRoute,
 ]);
 
 // Create and export router instance
