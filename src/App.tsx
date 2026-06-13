@@ -79,7 +79,7 @@ function App() {
             <Link
               to="/"
               className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors mb-4 group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-              activeProps={{ className: "bg-secondary text-secondary-foreground" }}
+              activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
               inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
               title="Trang chủ"
             >
@@ -121,7 +121,7 @@ function App() {
                 <Link
                   to="/case-converter"
                   className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-secondary text-secondary-foreground" }}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
                   inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
                   title="Chuyển đổi kiểu chữ"
                 >
@@ -144,7 +144,7 @@ function App() {
                 <Link
                   to="/diff-checker"
                   className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-secondary text-secondary-foreground" }}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
                   inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
                   title="Diff Checker"
                 >
@@ -188,7 +188,7 @@ function App() {
                 <Link
                   to="/base64"
                   className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-secondary text-secondary-foreground" }}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
                   inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
                   title="Base64 Encoder"
                 >
@@ -211,7 +211,7 @@ function App() {
                 <Link
                   to="/hash-generator"
                   className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-secondary text-secondary-foreground" }}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
                   inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
                   title="Hash Generator"
                 >
@@ -234,7 +234,7 @@ function App() {
                 <Link
                   to="/jwt"
                   className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-secondary text-secondary-foreground" }}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
                   inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
                   title="JWT Decoder"
                 >
