@@ -9,9 +9,6 @@ interface AppState {
   
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
-  
-  activeToolId: string | null;
-  setActiveToolId: (id: string) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -22,9 +19,6 @@ export const useAppStore = create<AppState>()(
 
       isSidebarOpen: true,
       toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
-
-      activeToolId: "home",
-      setActiveToolId: (id) => set({ activeToolId: id }),
     }),
     {
       name: "devtools-storage", // name of item in the storage (must be unique)

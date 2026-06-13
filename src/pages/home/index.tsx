@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { useAppStore } from "../../store/useAppStore";
+import { useNavigate } from "@tanstack/react-router";
 
 export default function Home() {
-  const { setActiveToolId } = useAppStore();
+  const navigate = useNavigate();
 
   const container = {
     hidden: { opacity: 0 },
@@ -114,7 +114,7 @@ export default function Home() {
                   key={tool.id}
                   variants={item}
                   onClick={() => {
-                    if (!tool.disabled) setActiveToolId(tool.id);
+                    if (!tool.disabled) navigate({ to: `/${tool.id}` });
                   }}
                   className={`relative overflow-hidden rounded-xl border border-border bg-card p-6 shadow-sm transition-all duration-200 
                     ${tool.disabled 
