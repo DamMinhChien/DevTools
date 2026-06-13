@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import CodeEditor from "../../components/CodeEditor";
 import type { Plugin } from "prettier";
 import prettier from "prettier/standalone";
 import parserBabel from "prettier/plugins/babel";
@@ -316,11 +317,12 @@ export default function CodeFormatter() {
                   Xóa
                 </button>
               </div>
-              <textarea
+              <CodeEditor
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={setInput}
                 placeholder={`Dán ${cfg?.label ?? ""} vào đây...`}
-                className="w-full h-80 p-4 font-mono text-sm bg-card border border-border rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all text-foreground placeholder:text-muted-foreground/50"
+                errorLine={status === "error" ? parseError?.line : undefined}
+                className="h-80 border-border focus-within:ring-2 focus-within:ring-primary/30"
               />
               <button
                 onClick={() => handleFormat(input, lang)}
@@ -414,14 +416,18 @@ export default function CodeFormatter() {
                     </details>
                   </motion.div>
                 ) : output ? (
-                  <motion.textarea
+                  <motion.div
                     key="output"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    readOnly
-                    value={output}
-                    className="w-full h-full p-4 font-mono text-sm bg-card border border-emerald-500/30 rounded-xl resize-none focus:outline-none text-foreground"
-                  />
+                    className="h-full"
+                  >
+                    <CodeEditor
+                      value={output}
+                      readOnly
+                      className="h-full border-emerald-500/30"
+                    />
+                  </motion.div>
                 ) : (
                   <div className="h-full rounded-xl border border-dashed border-border flex items-center justify-center">
                     <div className="text-center text-muted-foreground/50">
