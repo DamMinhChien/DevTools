@@ -9,6 +9,7 @@ interface AppState {
   
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
+  setSidebarOpen: (open: boolean) => void;
   
   isSearchOpen: boolean;
   setSearchOpen: (open: boolean) => void;
@@ -26,6 +27,7 @@ export const useAppStore = create<AppState>()(
 
       isSidebarOpen: true,
       toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+      setSidebarOpen: (open) => set({ isSidebarOpen: open }),
 
       isSearchOpen: false,
       setSearchOpen: (open) => set({ isSearchOpen: open }),

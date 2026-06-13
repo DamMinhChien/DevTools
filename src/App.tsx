@@ -5,13 +5,26 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import confetti from "canvas-confetti";
+import { useSwipeable } from "react-swipeable";
+import { useResponsiveSidebar } from "./hooks/useResponsiveSidebar";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
 import { fallingEffectConfig } from "./config/effects";
 
 function App() {
-  const { theme, setTheme, isSidebarOpen, toggleSidebar, setSearchOpen, setContactOpen } = useAppStore();
+  const { theme, setTheme, isSidebarOpen, toggleSidebar, setSidebarOpen, setSearchOpen, setContactOpen } = useAppStore();
   const location = useLocation();
+
+  // Apply responsive default states
+  useResponsiveSidebar();
+
+  // Swipe handlers for mobile
+  const swipeHandlers = useSwipeable({
+    onSwipedRight: () => setSidebarOpen(true),
+    onSwipedLeft: () => setSidebarOpen(false),
+    trackMouse: false,
+    delta: 50 // Minimum swipe distance
+  });
 
   // Handle Dark mode sync
   useEffect(() => {
@@ -74,7 +87,21 @@ function App() {
       <Helmet>
         <title>{pageTitle} | DevTools</title>
       </Helmet>
-      <div className="flex h-screen bg-background text-foreground font-display overflow-hidden">
+      <div {...swipeHandlers} className="flex h-screen bg-background text-foreground font-display overflow-hidden">
+        
+        {/* Mobile Backdrop */}
+        <AnimatePresence>
+          {isSidebarOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSidebarOpen(false)}
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-30 md:hidden"
+            />
+          )}
+        </AnimatePresence>
+
         {/* Sidebar */}
         <motion.aside 
           layout
@@ -83,6 +110,21 @@ function App() {
             isSidebarOpen ? "w-64 translate-x-0" : "w-64 -translate-x-full md:translate-x-0 md:w-16"
           }`}
         >
+          {/* Drag Handle (Desktop/Tablet) */}
+          {isSidebarOpen && (
+            <motion.div
+              drag="x"
+              dragConstraints={{ left: -100, right: 0 }}
+              dragElastic={0}
+              onDragEnd={(_, info) => {
+                if (info.offset.x < -30) {
+                  setSidebarOpen(false);
+                }
+              }}
+              className="absolute right-0 top-0 w-2 h-full cursor-col-resize hover:bg-primary/20 transition-colors z-50 hidden md:block"
+            />
+          )}
+
           {/* Brand Header */}
           <Link 
             to="/"
