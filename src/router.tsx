@@ -17,6 +17,7 @@ import RegexTester from "./pages/developer/regex-tester";
 import TimestampConverter from "./pages/developer/timestamp";
 import RequestBuilder from "./pages/generators/request-builder";
 import ApiTester from "./pages/developer/api-tester";
+import JsonQueryConverter from "./pages/developer/json-query";
 
 // Create root route with App as component
 const rootRoute = createRootRoute({
@@ -112,7 +113,14 @@ const apiTesterRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/api-tester",
   component: ApiTester,
-  staticData: { title: "API Tester" },
+  staticData: { title: "Postboy" },
+});
+
+const jsonQueryConverterRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/json-query-converter",
+  component: JsonQueryConverter,
+  staticData: { title: "JSON ↔ Query String" },
 });
 
 // Build route tree
@@ -130,6 +138,7 @@ const routeTree = rootRoute.addChildren([
   timestampRoute,
   requestBuilderRoute,
   apiTesterRoute,
+  jsonQueryConverterRoute,
 ]);
 
 // Create and export router instance

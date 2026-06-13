@@ -218,7 +218,7 @@ export default function ApiTester() {
                 Công cụ Lập trình
               </span>
             </div>
-            <h2 className="text-2xl font-bold text-primary">API Tester (Mini Postman)</h2>
+            <h2 className="text-2xl font-bold text-primary">Postboy</h2>
           </div>
         </header>
 
