@@ -56,6 +56,14 @@ export default function Home() {
           disabled: false
         },
         {
+          id: "hash-generator",
+          name: "Hash Generator",
+          description: "Tạo mã băm MD5, SHA-1, SHA-256, SHA-512 tức thì.",
+          icon: "tag",
+          color: "bg-pink-500",
+          disabled: false
+        },
+        {
           id: "jwt",
           name: "JWT Decoder",
           description: "Giải mã token JWT để xem header và payload.",

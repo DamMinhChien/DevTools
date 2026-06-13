@@ -3,6 +3,7 @@ import { useAppStore } from "./store/useAppStore";
 import { useHotkeys } from "react-hotkeys-hook";
 import TextCaseConverter from "./pages/text/case-converter";
 import Base64Converter from "./pages/encoders/base64";
+import HashGenerator from "./pages/encoders/hash-generator";
 import Home from "./pages/home";
 
 function App() {
@@ -112,6 +113,21 @@ function App() {
                   Base64 Encoder
                 </span>
               </button>
+              
+              <button
+                onClick={() => setActiveToolId('hash-generator')}
+                className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${
+                  activeToolId === 'hash-generator' 
+                    ? "bg-secondary text-secondary-foreground" 
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                } ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                title="Hash Generator"
+              >
+                <span className="material-symbols-outlined shrink-0 text-lg">tag</span>
+                <span className={`truncate transition-opacity duration-200 ${isSidebarOpen ? "opacity-100" : "opacity-0 hidden"}`}>
+                  Hash Generator
+                </span>
+              </button>
             </div>
           </div>
         </nav>
@@ -169,6 +185,7 @@ function App() {
           {activeToolId === 'home' && <Home />}
           {activeToolId === 'case-converter' && <TextCaseConverter />}
           {activeToolId === 'base64' && <Base64Converter />}
+          {activeToolId === 'hash-generator' && <HashGenerator />}
         </main>
       </div>
     </div>
