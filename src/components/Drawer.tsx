@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet'
+import type {ReactNode} from 'react'
+import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose} from '@/components/ui/sheet'
 
 interface DrawerProps {
   open: boolean
@@ -11,9 +11,11 @@ interface DrawerProps {
   className?: string
 }
 
-export function Drawer({ open, onClose, title, children, width = 'max-w-lg', className }: DrawerProps) {
+export function Drawer({open, onClose, title, children, width = 'max-w-lg', className}: DrawerProps) {
   return (
-    <Sheet open={open} onOpenChange={(v: boolean) => { if (!v) onClose() }}>
+    <Sheet open={open} onOpenChange={(v: boolean) => {
+      if (!v) onClose()
+    }}>
       <SheetContent
         side="right"
         showCloseButton={false}
@@ -26,7 +28,8 @@ export function Drawer({ open, onClose, title, children, width = 'max-w-lg', cla
         <SheetHeader className="px-6 pt-6 pb-2 relative shrink-0">
           <SheetTitle className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{title}</SheetTitle>
           <SheetClose asChild>
-            <button onClick={onClose} className="absolute right-6 top-6 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-slate-400 hover:text-slate-900">
+            <button onClick={onClose}
+                    className="absolute right-6 top-6 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-slate-400 hover:text-slate-900">
               <span className="material-symbols-outlined text-xl">close</span>
             </button>
           </SheetClose>
