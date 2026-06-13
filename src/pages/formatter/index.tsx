@@ -82,27 +82,62 @@ function detectLangFromExt(filename: string): string | null {
 // Format status
 type Status = "idle" | "loading" | "success" | "error";
 
+interface ParsedError {
+  headline: string;   // Tóm tắt ngắn gọn tiếng Việt
+  detail: string;     // Raw message gốc từ prettier
+  line?: number;
+  col?: number;
+  snippet?: string;   // Dòng code bị lỗi
+}
+
 export default function CodeFormatter() {
   const [mode, setMode] = useState<"paste" | "upload">("paste");
   const [lang, setLang] = useState<string>("json");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [status, setStatus] = useState<Status>("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [parseError, setParseError] = useState<ParsedError | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Parse error message từ prettier để lấy line/col
+  const parsePrettierError = useCallback((err: unknown, code: string): ParsedError => {
+    const raw = err instanceof Error ? err.message : "Lỗi không xác định";
+
+    // Prettier thường format: "SyntaxError: Unexpected token X (line:col)"
+    const locMatch = raw.match(/(\d+):(\d+)/);
+    const line = locMatch ? parseInt(locMatch[1]) : undefined;
+    const col = locMatch ? parseInt(locMatch[2]) : undefined;
+
+    // Lấy snippet dòng lỗi
+    let snippet: string | undefined;
+    if (line !== undefined) {
+      const lines = code.split("\n");
+      snippet = lines[line - 1]?.trim();
+    }
+
+    // Headline tiếng Việt
+    let headline = "Không thể format — kiểm tra lại cú pháp";
+    if (raw.includes("Unexpected token")) headline = "Token không hợp lệ";
+    else if (raw.includes("Unexpected end")) headline = "Thiếu ký tự đóng (dấu }, ], \" ...)";
+    else if (raw.includes("Unexpected identifier")) headline = "Tên biến/từ khóa không hợp lệ";
+    else if (raw.includes("is not defined")) headline = "Biến chưa được định nghĩa";
+    else if (raw.includes("missing")) headline = "Thiếu ký tự bắt buộc";
+
+    return { headline, detail: raw, line, col, snippet };
+  }, []);
 
   // ── Format logic ─────────────────────────────────────────────────────────────
   const handleFormat = useCallback(async (code: string, langKey: string) => {
     if (!code.trim()) return;
     setStatus("loading");
-    setErrorMsg("");
+    setParseError(null);
 
     const cfg = LANG_CONFIGS[langKey];
     if (!cfg) {
       setStatus("error");
-      setErrorMsg("Ngôn ngữ không được hỗ trợ.");
+      setParseError({ headline: "Ngôn ngữ không được hỗ trợ", detail: "" });
       return;
     }
 
@@ -119,11 +154,10 @@ export default function CodeFormatter() {
       setStatus("success");
     } catch (err: unknown) {
       setStatus("error");
-      const msg = err instanceof Error ? err.message : "Không thể format đoạn mã này.";
-      setErrorMsg(msg);
+      setParseError(parsePrettierError(err, code));
       setOutput("");
     }
-  }, []);
+  }, [parsePrettierError]);
 
   // ── File upload ───────────────────────────────────────────────────────────────
   const handleFileUpload = useCallback(
@@ -161,7 +195,7 @@ export default function CodeFormatter() {
     setInput("");
     setOutput("");
     setStatus("idle");
-    setErrorMsg("");
+    setParseError(null);
     setFileName(null);
   }, []);
 
@@ -317,11 +351,16 @@ export default function CodeFormatter() {
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  <span className={`w-2.5 h-2.5 rounded-full ${status === "error" ? "bg-destructive" : "bg-emerald-500"}`} />
                   <span className="text-sm font-medium text-muted-foreground">Output</span>
                   {status === "success" && (
                     <span className="text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full font-medium">
                       ✓ Đã format
+                    </span>
+                  )}
+                  {status === "error" && (
+                    <span className="text-xs bg-destructive/10 text-destructive px-2 py-0.5 rounded-full font-medium">
+                      ✗ Lỗi cú pháp
                     </span>
                   )}
                 </div>
@@ -338,16 +377,41 @@ export default function CodeFormatter() {
               </div>
 
               <div className="relative h-80">
-                {status === "error" ? (
+                {status === "error" && parseError ? (
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="h-full p-4 rounded-xl border border-destructive/40 bg-destructive/5 font-mono text-sm text-destructive overflow-auto whitespace-pre-wrap"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="h-full p-4 rounded-xl border border-destructive/40 bg-destructive/5 overflow-auto flex flex-col gap-3"
                   >
-                    <div className="flex items-start gap-2">
-                      <span className="material-symbols-outlined text-base shrink-0">error</span>
-                      <span>{errorMsg}</span>
+                    {/* Headline */}
+                    <div className="flex items-center gap-2 text-destructive font-semibold">
+                      <span className="material-symbols-outlined text-xl shrink-0">error</span>
+                      <span>{parseError.headline}</span>
                     </div>
+
+                    {/* Line/col badge */}
+                    {parseError.line !== undefined && (
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs bg-destructive/10 text-destructive font-mono px-2 py-1 rounded-md border border-destructive/20">
+                          Dòng {parseError.line}{parseError.col !== undefined ? `, Cột ${parseError.col}` : ""}
+                        </span>
+                        {parseError.snippet && (
+                          <code className="text-xs bg-muted text-muted-foreground font-mono px-2 py-1 rounded-md border border-border truncate max-w-[260px]">
+                            {parseError.snippet}
+                          </code>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Raw detail (collapsible) */}
+                    <details className="text-xs">
+                      <summary className="cursor-pointer text-muted-foreground hover:text-foreground select-none">
+                        Chi tiết lỗi gốc
+                      </summary>
+                      <pre className="mt-2 font-mono text-destructive/80 whitespace-pre-wrap break-all bg-destructive/5 rounded-md p-2 border border-destructive/20">
+                        {parseError.detail}
+                      </pre>
+                    </details>
                   </motion.div>
                 ) : output ? (
                   <motion.textarea
