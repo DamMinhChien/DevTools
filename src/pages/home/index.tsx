@@ -27,10 +27,19 @@ export default function Home() {
       tools: [
         {
           id: "case-converter",
-          name: "Chuyển đổi kiểu chữ",
-          description: "Chuyển đổi văn bản sang camelCase, PascalCase, snake_case,...",
+          name: "Case Converter",
+          description: "Chuyển đổi văn bản sang CamelCase, SnakeCase, v.v...",
           icon: "text_fields",
-          color: "bg-blue-500"
+          color: "bg-blue-500",
+          disabled: false
+        },
+        {
+          id: "diff-checker",
+          name: "Diff Checker",
+          description: "So sánh và tìm điểm khác biệt giữa 2 đoạn văn bản.",
+          icon: "difference",
+          color: "bg-indigo-500",
+          disabled: false
         },
         {
           id: "regex-tester",
@@ -67,9 +76,9 @@ export default function Home() {
           id: "jwt",
           name: "JWT Decoder",
           description: "Giải mã token JWT để xem header và payload.",
-          icon: "key",
-          color: "bg-orange-500",
-          disabled: true
+          icon: "lock_open",
+          color: "bg-purple-500",
+          disabled: false
         }
       ]
     }

@@ -3,8 +3,10 @@ import { useAppStore } from "./store/useAppStore";
 import { useHotkeys } from "react-hotkeys-hook";
 import { motion, AnimatePresence } from "framer-motion";
 import TextCaseConverter from "./pages/text/case-converter";
+import DiffChecker from "./pages/text/diff-checker";
 import Base64Converter from "./pages/encoders/base64";
 import HashGenerator from "./pages/encoders/hash-generator";
+import JwtDecoder from "./pages/encoders/jwt";
 import Home from "./pages/home";
 
 function App() {
@@ -93,20 +95,32 @@ function App() {
 
           {/* Group: Text Tools */}
           <div className="pt-2">
-            <AnimatePresence>
-              {isSidebarOpen ? (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="px-2 py-2 text-xs font-semibold text-primary/60 uppercase tracking-widest overflow-hidden"
-                >
-                  Công cụ Văn bản
-                </motion.div>
-              ) : (
-                <div className="h-4" /> // Spacer for closed state
-              )}
-            </AnimatePresence>
+            <div className="px-2 py-2 flex items-center justify-center h-8">
+              <AnimatePresence mode="wait">
+                {isSidebarOpen ? (
+                  <motion.div 
+                    key="open"
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: "auto" }}
+                    exit={{ opacity: 0, width: 0 }}
+                    className="text-xs font-semibold text-primary/60 uppercase tracking-widest overflow-hidden whitespace-nowrap w-full"
+                  >
+                    Công cụ Văn bản
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    key="closed"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-muted-foreground/40 flex items-center justify-center w-full"
+                    title="Công cụ Văn bản"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">text_snippet</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             
             <div className="mt-1 space-y-1">
               <button
@@ -133,25 +147,62 @@ function App() {
                   )}
                 </AnimatePresence>
               </button>
+
+              <button
+                onClick={() => setActiveToolId('diff-checker')}
+                className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${
+                  activeToolId === 'diff-checker' 
+                    ? "bg-secondary text-secondary-foreground" 
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                } ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                title="Diff Checker"
+              >
+                <motion.span layout className="material-symbols-outlined shrink-0 text-lg">difference</motion.span>
+                <AnimatePresence>
+                  {isSidebarOpen && (
+                    <motion.span 
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="truncate"
+                    >
+                      Diff Checker
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </button>
             </div>
           </div>
 
           {/* Group: Encoders */}
           <div className="pt-2">
-            <AnimatePresence>
-              {isSidebarOpen ? (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="px-2 py-2 text-xs font-semibold text-primary/60 uppercase tracking-widest overflow-hidden"
-                >
-                  Mã hóa & Giải mã
-                </motion.div>
-              ) : (
-                <div className="h-4" />
-              )}
-            </AnimatePresence>
+            <div className="px-2 py-2 flex items-center justify-center h-8">
+              <AnimatePresence mode="wait">
+                {isSidebarOpen ? (
+                  <motion.div 
+                    key="open"
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: "auto" }}
+                    exit={{ opacity: 0, width: 0 }}
+                    className="text-xs font-semibold text-primary/60 uppercase tracking-widest overflow-hidden whitespace-nowrap w-full"
+                  >
+                    Mã hóa & Giải mã
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    key="closed"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-muted-foreground/40 flex items-center justify-center w-full"
+                    title="Mã hóa & Giải mã"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">lock</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             
             <div className="mt-1 space-y-1">
               <button
@@ -199,6 +250,31 @@ function App() {
                       className="truncate"
                     >
                       Hash Generator
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </button>
+
+              <button
+                onClick={() => setActiveToolId('jwt')}
+                className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${
+                  activeToolId === 'jwt' 
+                    ? "bg-secondary text-secondary-foreground" 
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                } ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                title="JWT Decoder"
+              >
+                <motion.span layout className="material-symbols-outlined shrink-0 text-lg">lock_open</motion.span>
+                <AnimatePresence>
+                  {isSidebarOpen && (
+                    <motion.span 
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="truncate"
+                    >
+                      JWT Decoder
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -266,8 +342,10 @@ function App() {
         <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-muted/20">
           {activeToolId === 'home' && <Home />}
           {activeToolId === 'case-converter' && <TextCaseConverter />}
+          {activeToolId === 'diff-checker' && <DiffChecker />}
           {activeToolId === 'base64' && <Base64Converter />}
           {activeToolId === 'hash-generator' && <HashGenerator />}
+          {activeToolId === 'jwt' && <JwtDecoder />}
         </main>
       </motion.div>
     </div>
