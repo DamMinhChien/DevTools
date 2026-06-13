@@ -9,6 +9,10 @@ interface AppState {
   
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
+  
+  isSearchOpen: boolean;
+  setSearchOpen: (open: boolean) => void;
+  toggleSearch: () => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -19,6 +23,10 @@ export const useAppStore = create<AppState>()(
 
       isSidebarOpen: true,
       toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+
+      isSearchOpen: false,
+      setSearchOpen: (open) => set({ isSearchOpen: open }),
+      toggleSearch: () => set((state) => ({ isSearchOpen: !state.isSearchOpen })),
     }),
     {
       name: "devtools-storage", // name of item in the storage (must be unique)

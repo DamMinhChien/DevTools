@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "@tanstack/react-router";
+import { toolCategories } from "../../config/tools";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -19,70 +20,7 @@ export default function Home() {
     show: { opacity: 1, y: 0 }
   };
 
-  const categories = [
-    {
-      id: "text",
-      name: "Công cụ Văn bản",
-      icon: "subject",
-      tools: [
-        {
-          id: "case-converter",
-          name: "Case Converter",
-          description: "Chuyển đổi văn bản sang CamelCase, SnakeCase, v.v...",
-          icon: "text_fields",
-          color: "bg-blue-500",
-          disabled: false
-        },
-        {
-          id: "diff-checker",
-          name: "Diff Checker",
-          description: "So sánh và tìm điểm khác biệt giữa 2 đoạn văn bản.",
-          icon: "difference",
-          color: "bg-indigo-500",
-          disabled: false
-        },
-        {
-          id: "regex-tester",
-          name: "Kiểm tra Regex",
-          description: "Kiểm tra và kiểm thử biểu thức chính quy (Regular Expressions).",
-          icon: "regular_expression",
-          color: "bg-purple-500",
-          disabled: true
-        }
-      ]
-    },
-    {
-      id: "encoders",
-      name: "Mã hóa & Giải mã",
-      icon: "code",
-      tools: [
-        {
-          id: "base64",
-          name: "Base64 Encoder",
-          description: "Mã hóa và giải mã chuỗi Base64 dễ dàng.",
-          icon: "data_object",
-          color: "bg-emerald-500",
-          disabled: false
-        },
-        {
-          id: "hash-generator",
-          name: "Hash Generator",
-          description: "Tạo mã băm MD5, SHA-1, SHA-256, SHA-512 tức thì.",
-          icon: "tag",
-          color: "bg-pink-500",
-          disabled: false
-        },
-        {
-          id: "jwt",
-          name: "JWT Decoder",
-          description: "Giải mã token JWT để xem header và payload.",
-          icon: "lock_open",
-          color: "bg-purple-500",
-          disabled: false
-        }
-      ]
-    }
-  ];
+  const categories = toolCategories;
 
   return (
     <div className="max-w-6xl mx-auto space-y-10">

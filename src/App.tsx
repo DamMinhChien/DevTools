@@ -4,9 +4,10 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
+import CommandPalette from "./components/CommandPalette";
 
 function App() {
-  const { theme, setTheme, isSidebarOpen, toggleSidebar } = useAppStore();
+  const { theme, setTheme, isSidebarOpen, toggleSidebar, setSearchOpen } = useAppStore();
   const location = useLocation();
   const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || "admin@example.com";
 
@@ -26,6 +27,12 @@ function App() {
   useHotkeys('mod+b', (e) => {
     e.preventDefault();
     toggleSidebar();
+  });
+
+  // Hotkey to open search (Ctrl+K or Cmd+K)
+  useHotkeys('mod+k', (e) => {
+    e.preventDefault();
+    setSearchOpen(true);
   });
 
   let pageTitle = "Trang chủ";
@@ -307,16 +314,20 @@ function App() {
                 </span>
               </button>
 
-              {/* Global Search Bar */}
-              <div className="relative w-full max-w-md hidden sm:block group">
+              {/* Global Search Bar (Fake trigger) */}
+              <div 
+                className="relative w-full max-w-md hidden sm:block group cursor-pointer"
+                onClick={() => setSearchOpen(true)}
+              >
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <span className="material-symbols-outlined text-muted-foreground text-sm">search</span>
                 </div>
-                <input
-                  className="w-full bg-muted/50 border border-border rounded-md py-1.5 pl-9 pr-12 text-sm focus-within:ring-1 focus-within:ring-primary transition-all outline-none text-foreground placeholder:text-muted-foreground"
-                  placeholder="Tìm kiếm công cụ... (⌘K)"
-                  type="text"
-                />
+                <div className="w-full bg-muted/50 border border-border rounded-md py-1.5 pl-9 pr-3 text-sm text-muted-foreground transition-all group-hover:bg-muted group-hover:border-border/80 flex items-center justify-between">
+                  <span>Tìm kiếm công cụ...</span>
+                  <kbd className="hidden md:inline-flex items-center gap-1 rounded border border-border bg-background px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">
+                    <span className="text-xs">⌘</span>K
+                  </kbd>
+                </div>
               </div>
             </div>
 
@@ -345,6 +356,9 @@ function App() {
           </main>
         </motion.div>
       </div>
+
+      {/* Global Modals */}
+      <CommandPalette />
     </>
   );
 }
