@@ -66,7 +66,7 @@ export default function ContactModal() {
                   className="w-full flex items-center p-3 rounded-xl border border-border bg-card hover:border-red-500/50 hover:shadow-sm transition-all group"
                 >
                   <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center mr-4 group-hover:scale-105 transition-transform">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail" className="w-6 h-6" />
+                    <img src="https://img.icons8.com/color/48/gmail-new.png" alt="Gmail" className="w-6 h-6" />
                   </div>
                   <div className="flex-1 text-left">
                     <h3 className="font-semibold text-foreground">Gmail (Trình duyệt)</h3>
@@ -83,7 +83,7 @@ export default function ContactModal() {
                   className="w-full flex items-center p-3 rounded-xl border border-border bg-card hover:border-blue-500/50 hover:shadow-sm transition-all group"
                 >
                   <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-4 group-hover:scale-105 transition-transform">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg" alt="Outlook" className="w-6 h-6" />
+                    <img src="https://img.icons8.com/color/48/microsoft-outlook-2019--v2.png" alt="Outlook" className="w-6 h-6" />
                   </div>
                   <div className="flex-1 text-left">
                     <h3 className="font-semibold text-foreground">Outlook (Trình duyệt)</h3>
