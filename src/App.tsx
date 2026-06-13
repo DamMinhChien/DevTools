@@ -108,10 +108,8 @@ function App() {
         </AnimatePresence>
 
         {/* Sidebar */}
-        <motion.aside 
-          layout
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className={`fixed left-0 top-0 h-full bg-card border-r border-border shadow-sm flex flex-col py-4 z-40 ${
+        <aside 
+          className={`fixed left-0 top-0 h-full bg-card border-r border-border shadow-sm flex flex-col py-4 z-40 transition-all duration-300 ease-in-out ${
             isSidebarOpen ? "w-64 translate-x-0" : "w-64 -translate-x-full md:translate-x-0 md:w-16"
           }`}
         >
@@ -283,10 +281,8 @@ function App() {
         </motion.aside>
 
         {/* Main Content Shell */}
-        <motion.div 
-          layout
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className={`flex flex-col h-screen flex-1 min-w-0 ${
+        <div 
+          className={`flex flex-col h-screen flex-1 min-w-0 transition-all duration-300 ease-in-out ${
             isSidebarOpen ? "md:ml-64" : "md:ml-16"
           }`}
         >
