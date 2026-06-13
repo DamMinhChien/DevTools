@@ -121,7 +121,7 @@ function App() {
                   setSidebarOpen(false);
                 }
               }}
-              className="absolute right-0 top-0 w-2 h-full cursor-col-resize hover:bg-primary/20 transition-colors z-50 hidden md:block"
+              className="absolute -right-1 top-0 w-3 h-full cursor-col-resize hover:bg-primary/30 transition-colors z-50 hidden md:block"
             />
           )}
 

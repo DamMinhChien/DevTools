@@ -24,7 +24,7 @@ export function useResponsiveSidebar() {
     handleResize();
 
     // Tùy chọn: Bỏ comment nếu muốn tự động thu/phóng mỗi khi resize cửa sổ
-    // window.addEventListener('resize', handleResize);
-    // return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [setSidebarOpen]);
 }
