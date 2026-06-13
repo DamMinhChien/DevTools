@@ -256,6 +256,32 @@ function App() {
               </div>
             </div>
           </nav>
+
+          {/* Feedback / Contact */}
+          <div className="p-4 border-t border-border mt-auto shrink-0">
+            <a 
+              href="mailto:damminhchien220204@gmail.com?subject=[DevTools] Góp ý tính năng / Báo lỗi&body=Xin chào Admin,%0A%0ATôi muốn báo lỗi hoặc góp ý về tính năng...%0A%0A[Vui lòng nhập mô tả chi tiết tại đây]"
+              className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group text-muted-foreground hover:bg-primary/10 hover:text-primary ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+              title="Gửi Email Góp ý"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="material-symbols-outlined shrink-0 text-lg">mail</span>
+              <AnimatePresence>
+                {isSidebarOpen && (
+                  <motion.span 
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: "auto" }}
+                    exit={{ opacity: 0, width: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="truncate font-semibold"
+                  >
+                    Gửi Góp ý
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </a>
+          </div>
         </motion.aside>
 
         {/* Main Content Shell */}
