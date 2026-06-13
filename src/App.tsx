@@ -5,11 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import CommandPalette from "./components/CommandPalette";
+import ContactModal from "./components/ContactModal";
 
 function App() {
-  const { theme, setTheme, isSidebarOpen, toggleSidebar, setSearchOpen } = useAppStore();
+  const { theme, setTheme, isSidebarOpen, toggleSidebar, setSearchOpen, setContactOpen } = useAppStore();
   const location = useLocation();
-  const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || "admin@example.com";
 
   // Handle Dark mode sync
   useEffect(() => {
@@ -267,12 +267,10 @@ function App() {
 
           {/* Feedback / Contact */}
           <div className="p-4 border-t border-border mt-auto shrink-0">
-            <a 
-              href={`mailto:${contactEmail}?subject=[DevTools] Góp ý tính năng / Báo lỗi&body=Xin chào Admin,%0A%0ATôi muốn báo lỗi hoặc góp ý về tính năng...%0A%0A[Vui lòng nhập mô tả chi tiết tại đây]`}
+            <button 
+              onClick={() => setContactOpen(true)}
               className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group text-muted-foreground hover:bg-primary/10 hover:text-primary ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
               title="Gửi Email Góp ý"
-              target="_blank"
-              rel="noopener noreferrer"
             >
               <span className="material-symbols-outlined shrink-0 text-lg">mail</span>
               <AnimatePresence>
@@ -288,7 +286,7 @@ function App() {
                   </motion.span>
                 )}
               </AnimatePresence>
-            </a>
+            </button>
           </div>
         </motion.aside>
 
@@ -359,6 +357,7 @@ function App() {
 
       {/* Global Modals */}
       <CommandPalette />
+      <ContactModal />
     </>
   );
 }

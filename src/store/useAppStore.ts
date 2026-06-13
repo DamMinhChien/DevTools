@@ -13,6 +13,9 @@ interface AppState {
   isSearchOpen: boolean;
   setSearchOpen: (open: boolean) => void;
   toggleSearch: () => void;
+  
+  isContactOpen: boolean;
+  setContactOpen: (open: boolean) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -27,6 +30,9 @@ export const useAppStore = create<AppState>()(
       isSearchOpen: false,
       setSearchOpen: (open) => set({ isSearchOpen: open }),
       toggleSearch: () => set((state) => ({ isSearchOpen: !state.isSearchOpen })),
+
+      isContactOpen: false,
+      setContactOpen: (open) => set({ isContactOpen: open }),
     }),
     {
       name: "devtools-storage", // name of item in the storage (must be unique)
