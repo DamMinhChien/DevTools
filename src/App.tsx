@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppStore } from "./store/useAppStore";
 import { useHotkeys } from "react-hotkeys-hook";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,16 +12,14 @@ import FallingEffect from "./components/FallingEffect";
 import { toolCategories } from "./config/tools";
 
 function App() {
-  const { theme, setTheme, isSidebarOpen, toggleSidebar, setSidebarOpen, setSearchOpen, setContactOpen, isFallingEffectActive, toggleFallingEffect } = useAppStore();
+  const { 
+    theme, setTheme, 
+    isSidebarOpen, toggleSidebar, setSidebarOpen, 
+    setSearchOpen, setContactOpen, 
+    isFallingEffectActive, toggleFallingEffect,
+    expandedSidebarGroups, toggleSidebarGroup
+  } = useAppStore();
   const matches = useMatches();
-  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
-
-  const toggleGroup = (groupId: string) => {
-    setCollapsedGroups(prev => ({
-      ...prev,
-      [groupId]: !prev[groupId]
-    }));
-  };
 
   // Apply responsive default states
   useResponsiveSidebar();
@@ -162,11 +160,11 @@ function App() {
             </Link>
 
             {toolCategories.map(category => {
-              const isCollapsed = collapsedGroups[category.id];
+              const isCollapsed = !expandedSidebarGroups[category.id];
               return (
                 <div key={category.id} className="pt-2">
                   <div 
-                    onClick={() => toggleGroup(category.id)}
+                    onClick={() => toggleSidebarGroup(category.id)}
                     className="px-2 py-2 flex items-center h-8 text-blue-600 dark:text-blue-500 font-bold uppercase tracking-widest text-xs cursor-pointer hover:bg-muted/50 rounded-lg transition-colors group/header"
                   >
                     <span className={`material-symbols-outlined shrink-0 text-[18px] ${isSidebarOpen ? "mr-2" : "mx-auto"}`} title={category.name}>{category.icon}</span>
@@ -201,7 +199,7 @@ function App() {
                         {category.tools.map(tool => (
                           <Link
                             key={tool.id}
-                            to={`/${tool.id}`}
+                            to={`/${tool.id}` as any}
                             className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
                             activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
                             inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}

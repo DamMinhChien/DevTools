@@ -20,6 +20,9 @@ interface AppState {
 
   isFallingEffectActive: boolean;
   toggleFallingEffect: () => void;
+
+  expandedSidebarGroups: Record<string, boolean>;
+  toggleSidebarGroup: (groupId: string) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -41,6 +44,14 @@ export const useAppStore = create<AppState>()(
 
       isFallingEffectActive: false,
       toggleFallingEffect: () => set((state) => ({ isFallingEffectActive: !state.isFallingEffectActive })),
+
+      expandedSidebarGroups: {},
+      toggleSidebarGroup: (groupId) => set((state) => ({
+        expandedSidebarGroups: {
+          ...state.expandedSidebarGroups,
+          [groupId]: !state.expandedSidebarGroups[groupId]
+        }
+      })),
     }),
     {
       name: "devtools-storage", // name of item in the storage (must be unique)
