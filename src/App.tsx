@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppStore } from "./store/useAppStore";
 import { useHotkeys } from "react-hotkeys-hook";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,10 +9,19 @@ import { useResponsiveSidebar } from "./hooks/useResponsiveSidebar";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
 import FallingEffect from "./components/FallingEffect";
+import { toolCategories } from "./config/tools";
 
 function App() {
   const { theme, setTheme, isSidebarOpen, toggleSidebar, setSidebarOpen, setSearchOpen, setContactOpen, isFallingEffectActive, toggleFallingEffect } = useAppStore();
   const matches = useMatches();
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+
+  const toggleGroup = (groupId: string) => {
+    setCollapsedGroups(prev => ({
+      ...prev,
+      [groupId]: !prev[groupId]
+    }));
+  };
 
   // Apply responsive default states
   useResponsiveSidebar();
@@ -152,360 +161,74 @@ function App() {
               </AnimatePresence>
             </Link>
 
-            {/* Group: Text Tools */}
-            <div className="pt-2">
-              <div className="px-2 py-2 flex items-center h-8 text-blue-600 dark:text-blue-500 font-bold uppercase tracking-widest text-xs">
-                <span className={`material-symbols-outlined shrink-0 text-[18px] ${isSidebarOpen ? "mr-2" : "mx-auto"}`} title="Công cụ Văn bản">text_snippet</span>
-                <AnimatePresence>
-                  {isSidebarOpen && (
-                    <motion.span 
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: "auto" }}
-                      exit={{ opacity: 0, width: 0 }}
-                      className="overflow-hidden whitespace-nowrap"
-                    >
-                      Công cụ Văn bản
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </div>
-              
-              <div className="mt-1 space-y-1">
-                <Link
-                  to="/case-converter"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="Chuyển đổi kiểu chữ"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">text_fields</motion.span>
-                  <AnimatePresence>
+            {toolCategories.map(category => {
+              const isCollapsed = collapsedGroups[category.id];
+              return (
+                <div key={category.id} className="pt-2">
+                  <div 
+                    onClick={() => toggleGroup(category.id)}
+                    className="px-2 py-2 flex items-center h-8 text-blue-600 dark:text-blue-500 font-bold uppercase tracking-widest text-xs cursor-pointer hover:bg-muted/50 rounded-lg transition-colors group/header"
+                  >
+                    <span className={`material-symbols-outlined shrink-0 text-[18px] ${isSidebarOpen ? "mr-2" : "mx-auto"}`} title={category.name}>{category.icon}</span>
+                    <AnimatePresence>
+                      {isSidebarOpen && (
+                        <motion.span 
+                          initial={{ opacity: 0, width: 0 }}
+                          animate={{ opacity: 1, width: "auto" }}
+                          exit={{ opacity: 0, width: 0 }}
+                          className="overflow-hidden whitespace-nowrap flex-1"
+                        >
+                          {category.name}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
                     {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
+                      <span className="material-symbols-outlined text-[16px] text-muted-foreground opacity-0 group-hover/header:opacity-100 transition-opacity">
+                        {isCollapsed ? "expand_more" : "expand_less"}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <AnimatePresence initial={false}>
+                    {!isCollapsed && (
+                      <motion.div 
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="truncate"
+                        className="mt-1 space-y-1 overflow-hidden"
                       >
-                        Chuyển đổi kiểu chữ
-                      </motion.span>
+                        {category.tools.map(tool => (
+                          <Link
+                            key={tool.id}
+                            to={`/${tool.id}`}
+                            className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                            activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
+                            inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
+                            title={tool.name}
+                          >
+                            <motion.span layout className="material-symbols-outlined shrink-0 text-lg">{tool.icon}</motion.span>
+                            <AnimatePresence>
+                              {isSidebarOpen && (
+                                <motion.span 
+                                  initial={{ opacity: 0, width: 0 }}
+                                  animate={{ opacity: 1, width: "auto" }}
+                                  exit={{ opacity: 0, width: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="truncate"
+                                >
+                                  {tool.name}
+                                </motion.span>
+                              )}
+                            </AnimatePresence>
+                          </Link>
+                        ))}
+                      </motion.div>
                     )}
                   </AnimatePresence>
-                </Link>
-
-                <Link
-                  to="/diff-checker"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="Diff Checker"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">difference</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        Diff Checker
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-              </div>
-            </div>
-
-            {/* Group: Encoders */}
-            <div className="pt-2">
-              <div className="px-2 py-2 flex items-center h-8 text-blue-600 dark:text-blue-500 font-bold uppercase tracking-widest text-xs">
-                <span className={`material-symbols-outlined shrink-0 text-[18px] ${isSidebarOpen ? "mr-2" : "mx-auto"}`} title="Mã hóa & Giải mã">lock</span>
-                <AnimatePresence>
-                  {isSidebarOpen && (
-                    <motion.span 
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: "auto" }}
-                      exit={{ opacity: 0, width: 0 }}
-                      className="overflow-hidden whitespace-nowrap"
-                    >
-                      Mã hóa & Giải mã
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </div>
-              
-              <div className="mt-1 space-y-1">
-                <Link
-                  to="/base64"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="Base64 Encoder"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">data_object</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        Base64 Encoder
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-                <Link
-                  to="/jwt"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="JWT Decoder"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">lock_open</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        JWT Decoder
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-                <Link
-                  to="/url-encoder"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="URL Encoder"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">link</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        URL Encoder
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-              </div>
-            </div>
-
-            {/* Group: Developer Tools */}
-            <div className="pt-2">
-              <div className="px-2 py-2 flex items-center h-8 text-blue-600 dark:text-blue-500 font-bold uppercase tracking-widest text-xs">
-                <span className={`material-symbols-outlined shrink-0 text-[18px] ${isSidebarOpen ? "mr-2" : "mx-auto"}`} title="Công cụ Lập trình">terminal</span>
-                <AnimatePresence>
-                  {isSidebarOpen && (
-                    <motion.span 
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: "auto" }}
-                      exit={{ opacity: 0, width: 0 }}
-                      className="overflow-hidden whitespace-nowrap"
-                    >
-                      Lập trình
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </div>
-              <div className="mt-1 space-y-1">
-                <Link
-                  to="/code-formatter"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="Code Formatter"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">format_align_left</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        Code Formatter
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-
-                <Link
-                  to="/regex-tester"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="Kiểm tra Regex"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">regular_expression</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        Kiểm tra Regex
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-
-                <Link
-                  to="/timestamp-converter"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="Unix Timestamp"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">schedule</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        Unix Timestamp
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-
-                <Link
-                  to="/api-tester"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="API Tester"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">send</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        API Tester
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-              </div>
-            </div>
-
-            {/* Group: Generators */}
-            <div className="pt-2">
-              <div className="px-2 py-2 flex items-center h-8 text-blue-600 dark:text-blue-500 font-bold uppercase tracking-widest text-xs">
-                <span className={`material-symbols-outlined shrink-0 text-[18px] ${isSidebarOpen ? "mr-2" : "mx-auto"}`} title="Trình Tạo Dữ Liệu">autorenew</span>
-                <AnimatePresence>
-                  {isSidebarOpen && (
-                    <motion.span 
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: "auto" }}
-                      exit={{ opacity: 0, width: 0 }}
-                      className="overflow-hidden whitespace-nowrap"
-                    >
-                      Tạo Dữ Liệu
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </div>
-              <div className="mt-1 space-y-1">
-                <Link
-                  to="/hash-generator"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="Hash Generator"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">tag</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        Hash Generator
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-
-                <Link
-                  to="/uuid-generator"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="UUID Generator"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">fingerprint</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        UUID Generator
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-                <Link
-                  to="/request-builder"
-                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                  title="Request Builder"
-                >
-                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">api</motion.span>
-                  <AnimatePresence>
-                    {isSidebarOpen && (
-                      <motion.span 
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="truncate"
-                      >
-                        Request Builder
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-              </div>
-            </div>
+                </div>
+              );
+            })}
           </nav>
 
           {/* Feedback / Contact */}
