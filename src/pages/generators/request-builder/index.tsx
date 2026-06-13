@@ -4,6 +4,7 @@ import hmacSHA256 from "crypto-js/hmac-sha256";
 import hmacSHA512 from "crypto-js/hmac-sha512";
 import hmacMD5 from "crypto-js/hmac-md5";
 import CodeEditor from "../../../components/CodeEditor";
+import { SimpleTooltip } from "../../../components/ui/tooltip";
 import "@aejkatappaja/phantom-ui";
 
 interface Param {
@@ -294,13 +295,14 @@ export default function RequestBuilder() {
                     <option value="json">application/json</option>
                     <option value="form">x-www-form-urlencoded</option>
                   </select>
-                  <button 
-                    onClick={() => handleCopy(generatedPayload)}
-                    className="text-muted-foreground hover:text-primary transition-colors flex items-center p-1"
-                    title="Copy payload"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">content_copy</span>
-                  </button>
+                  <SimpleTooltip content="Copy payload" side="top">
+                    <button 
+                      onClick={() => handleCopy(generatedPayload)}
+                      className="text-muted-foreground hover:text-primary transition-colors flex items-center p-1"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">content_copy</span>
+                    </button>
+                  </SimpleTooltip>
                 </div>
               </div>
               

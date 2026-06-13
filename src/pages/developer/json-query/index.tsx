@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import CodeEditor from "../../../components/CodeEditor";
+import { SimpleTooltip } from "../../../components/ui/tooltip";
 
 export default function JsonQueryConverter() {
   const [jsonValue, setJsonValue] = useState("{\n  \"page\": \"1\",\n  \"limit\": \"10\",\n  \"tags\": [\n    \"news\",\n    \"sports\"\n  ]\n}");
@@ -115,33 +116,36 @@ export default function JsonQueryConverter() {
               JSON Object
             </h3>
             <div className="flex items-center gap-2">
-              <button 
-                onClick={() => {
-                  try {
-                    const parsed = JSON.parse(jsonValue);
-                    setJsonValue(JSON.stringify(parsed, null, 2));
-                    setLastEdited("json");
-                  } catch {}
-                }}
-                className="p-1.5 text-muted-foreground hover:text-primary transition-colors bg-background rounded-md border border-border shadow-sm"
-                title="Format JSON"
-              >
-                <span className="material-symbols-outlined text-[18px]">format_align_left</span>
-              </button>
-              <button 
-                onClick={() => copyToClipboard(jsonValue)}
-                className="p-1.5 text-muted-foreground hover:text-primary transition-colors bg-background rounded-md border border-border shadow-sm"
-                title="Copy"
-              >
-                <span className="material-symbols-outlined text-[18px]">content_copy</span>
-              </button>
-              <button 
-                onClick={() => handleJsonChange("{}")}
-                className="p-1.5 text-muted-foreground hover:text-destructive transition-colors bg-background rounded-md border border-border shadow-sm"
-                title="Clear"
-              >
-                <span className="material-symbols-outlined text-[18px]">delete</span>
-              </button>
+              <SimpleTooltip content="Format JSON" side="top">
+                <button 
+                  onClick={() => {
+                    try {
+                      const parsed = JSON.parse(jsonValue);
+                      setJsonValue(JSON.stringify(parsed, null, 2));
+                      setLastEdited("json");
+                    } catch {}
+                  }}
+                  className="p-1.5 text-muted-foreground hover:text-primary transition-colors bg-background rounded-md border border-border shadow-sm"
+                >
+                  <span className="material-symbols-outlined text-[18px]">format_align_left</span>
+                </button>
+              </SimpleTooltip>
+              <SimpleTooltip content="Copy" side="top">
+                <button 
+                  onClick={() => copyToClipboard(jsonValue)}
+                  className="p-1.5 text-muted-foreground hover:text-primary transition-colors bg-background rounded-md border border-border shadow-sm"
+                >
+                  <span className="material-symbols-outlined text-[18px]">content_copy</span>
+                </button>
+              </SimpleTooltip>
+              <SimpleTooltip content="Clear" side="top">
+                <button 
+                  onClick={() => handleJsonChange("{}")}
+                  className="p-1.5 text-muted-foreground hover:text-destructive transition-colors bg-background rounded-md border border-border shadow-sm"
+                >
+                  <span className="material-symbols-outlined text-[18px]">delete</span>
+                </button>
+              </SimpleTooltip>
             </div>
           </div>
           <div className="flex-1 relative min-h-[300px]">
@@ -160,20 +164,22 @@ export default function JsonQueryConverter() {
               Query String
             </h3>
             <div className="flex items-center gap-2">
-              <button 
-                onClick={() => copyToClipboard(queryValue)}
-                className="p-1.5 text-muted-foreground hover:text-primary transition-colors bg-background rounded-md border border-border shadow-sm"
-                title="Copy"
-              >
-                <span className="material-symbols-outlined text-[18px]">content_copy</span>
-              </button>
-              <button 
-                onClick={() => handleQueryChange("")}
-                className="p-1.5 text-muted-foreground hover:text-destructive transition-colors bg-background rounded-md border border-border shadow-sm"
-                title="Clear"
-              >
-                <span className="material-symbols-outlined text-[18px]">delete</span>
-              </button>
+              <SimpleTooltip content="Copy" side="top">
+                <button 
+                  onClick={() => copyToClipboard(queryValue)}
+                  className="p-1.5 text-muted-foreground hover:text-primary transition-colors bg-background rounded-md border border-border shadow-sm"
+                >
+                  <span className="material-symbols-outlined text-[18px]">content_copy</span>
+                </button>
+              </SimpleTooltip>
+              <SimpleTooltip content="Clear" side="top">
+                <button 
+                  onClick={() => handleQueryChange("")}
+                  className="p-1.5 text-muted-foreground hover:text-destructive transition-colors bg-background rounded-md border border-border shadow-sm"
+                >
+                  <span className="material-symbols-outlined text-[18px]">delete</span>
+                </button>
+              </SimpleTooltip>
             </div>
           </div>
           <div className="flex-1 p-4 bg-background/50 overflow-y-auto">

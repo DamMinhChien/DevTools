@@ -10,6 +10,7 @@ import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
 import FallingEffect from "./components/FallingEffect";
 import { toolCategories } from "./config/tools";
+import { SimpleTooltip } from "./components/ui/tooltip";
 
 function App() {
   const { 
@@ -167,7 +168,9 @@ function App() {
                     onClick={() => toggleSidebarGroup(category.id)}
                     className="px-2 py-2 flex items-center h-8 text-blue-600 dark:text-blue-500 font-bold uppercase tracking-widest text-xs cursor-pointer hover:bg-muted/50 rounded-lg transition-colors group/header"
                   >
-                    <span className={`material-symbols-outlined shrink-0 text-[18px] ${isSidebarOpen ? "mr-2" : "mx-auto"}`} title={category.name}>{category.icon}</span>
+                    <SimpleTooltip content={category.name} side="right">
+                      <span className={`material-symbols-outlined shrink-0 text-[18px] ${isSidebarOpen ? "mr-2" : "mx-auto"}`}>{category.icon}</span>
+                    </SimpleTooltip>
                     <AnimatePresence>
                       {isSidebarOpen && (
                         <motion.span 
@@ -197,29 +200,29 @@ function App() {
                         className="mt-1 space-y-1 overflow-hidden"
                       >
                         {category.tools.map(tool => (
-                          <Link
-                            key={tool.id}
-                            to={`/${tool.id}` as any}
-                            className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-                            activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
-                            inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
-                            title={tool.name}
-                          >
-                            <motion.span layout className="material-symbols-outlined shrink-0 text-lg">{tool.icon}</motion.span>
-                            <AnimatePresence>
-                              {isSidebarOpen && (
-                                <motion.span 
-                                  initial={{ opacity: 0, width: 0 }}
-                                  animate={{ opacity: 1, width: "auto" }}
-                                  exit={{ opacity: 0, width: 0 }}
-                                  transition={{ duration: 0.2 }}
-                                  className="truncate"
-                                >
-                                  {tool.name}
-                                </motion.span>
-                              )}
-                            </AnimatePresence>
-                          </Link>
+                          <SimpleTooltip content={tool.name} side="right" key={tool.id}>
+                            <Link
+                              to={`/${tool.id}` as any}
+                              className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                              activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
+                              inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
+                            >
+                              <motion.span layout className="material-symbols-outlined shrink-0 text-lg">{tool.icon}</motion.span>
+                              <AnimatePresence>
+                                {isSidebarOpen && (
+                                  <motion.span 
+                                    initial={{ opacity: 0, width: 0 }}
+                                    animate={{ opacity: 1, width: "auto" }}
+                                    exit={{ opacity: 0, width: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="truncate"
+                                  >
+                                    {tool.name}
+                                  </motion.span>
+                                )}
+                              </AnimatePresence>
+                            </Link>
+                          </SimpleTooltip>
                         ))}
                       </motion.div>
                     )}
@@ -231,26 +234,27 @@ function App() {
 
           {/* Feedback / Contact */}
           <div className="border-t border-border mt-auto shrink-0">
-            <button 
-              onClick={() => setContactOpen(true)}
-              className={`w-full flex items-center px-4 py-3 text-sm font-medium transition-colors group text-muted-foreground hover:bg-primary/10 hover:text-primary ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
-              title="Gửi Email Góp ý"
-            >
-              <span className="material-symbols-outlined shrink-0 text-lg">mail</span>
-              <AnimatePresence>
-                {isSidebarOpen && (
-                  <motion.span 
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: "auto" }}
-                    exit={{ opacity: 0, width: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="truncate font-semibold"
-                  >
-                    Gửi Góp ý
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
+            <SimpleTooltip content="Gửi Email Góp ý" side="right">
+              <button 
+                onClick={() => setContactOpen(true)}
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium transition-colors group text-muted-foreground hover:bg-primary/10 hover:text-primary ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+              >
+                <span className="material-symbols-outlined shrink-0 text-lg">mail</span>
+                <AnimatePresence>
+                  {isSidebarOpen && (
+                    <motion.span 
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="truncate font-semibold"
+                    >
+                      Gửi Góp ý
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </button>
+            </SimpleTooltip>
           </div>
         </motion.aside>
 
@@ -266,15 +270,16 @@ function App() {
           <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border flex justify-between items-center px-4 md:px-8 h-16 shrink-0">
             <div className="flex items-center gap-4 flex-1">
               {/* Sidebar Toggle Button */}
-              <button 
-                onClick={toggleSidebar}
-                className="p-2 hover:bg-muted rounded-md transition-colors text-muted-foreground hover:text-foreground hidden md:block"
-                title="Đóng/Mở Sidebar (Cmd+B)"
-              >
-                <span className="material-symbols-outlined">
-                  {isSidebarOpen ? "menu_open" : "menu"}
-                </span>
-              </button>
+              <SimpleTooltip content="Đóng/Mở Sidebar (Cmd+B)" side="bottom">
+                <button 
+                  onClick={toggleSidebar}
+                  className="p-2 hover:bg-muted rounded-md transition-colors text-muted-foreground hover:text-foreground hidden md:block"
+                >
+                  <span className="material-symbols-outlined">
+                    {isSidebarOpen ? "menu_open" : "menu"}
+                  </span>
+                </button>
+              </SimpleTooltip>
 
               {/* Global Search Bar (Fake trigger) */}
               <div 
@@ -295,35 +300,39 @@ function App() {
 
             {/* Right Actions */}
             <div className="flex items-center gap-2">
-              <motion.button
-                className={`p-2 rounded-md transition-colors flex items-center justify-center text-xl relative ${
-                  isFallingEffectActive
-                    ? "bg-primary/10 ring-2 ring-primary/40"
-                    : "hover:bg-muted"
-                }`}
-                onClick={toggleFallingEffect}
-                title={isFallingEffectActive ? "Tắt hiệu ứng rơi" : "Bật hiệu ứng rơi"}
-                whileTap={{ scale: 0.85 }}
-                animate={isFallingEffectActive ? { rotate: [0, -10, 10, -10, 10, 0] } : {}}
-                transition={{ duration: 0.4 }}
-              >
-                {import.meta.env.VITE_FALLING_EMOJIS?.split(",")[0]?.trim() || "🍂"}
-              </motion.button>
-              
-              <button
-                className="p-2 hover:bg-muted rounded-md transition-colors group flex items-center justify-center"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                title="Chế độ Sáng/Tối"
-              >
-                <motion.span 
-                  initial={{ rotate: 0 }}
-                  animate={{ rotate: theme === "dark" ? 360 : 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="material-symbols-outlined text-muted-foreground group-hover:text-primary"
+              <SimpleTooltip content={isFallingEffectActive ? "Tắt hiệu ứng rơi" : "Bật hiệu ứng rơi"} side="bottom">
+                <motion.button
+                  className={`p-2 rounded-md transition-colors flex items-center justify-center text-xl relative ${
+                    isFallingEffectActive
+                      ? "bg-primary/10 ring-2 ring-primary/40 text-primary"
+                      : "hover:bg-muted text-muted-foreground"
+                  }`}
+                  onClick={toggleFallingEffect}
+                  whileTap={{ scale: 0.85 }}
+                  animate={isFallingEffectActive ? { rotate: [0, -10, 10, -10, 10, 0] } : {}}
+                  transition={{ duration: 0.4 }}
                 >
-                  {theme === "dark" ? "light_mode" : "dark_mode"}
-                </motion.span>
-              </button>
+                  <span className="material-symbols-outlined">
+                    auto_awesome
+                  </span>
+                </motion.button>
+              </SimpleTooltip>
+              
+              <SimpleTooltip content="Chế độ Sáng/Tối" side="bottom">
+                <button
+                  className="p-2 hover:bg-muted rounded-md transition-colors group flex items-center justify-center"
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                >
+                  <motion.span 
+                    initial={{ rotate: 0 }}
+                    animate={{ rotate: theme === "dark" ? 360 : 0 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="material-symbols-outlined text-muted-foreground group-hover:text-foreground"
+                  >
+                    {theme === "dark" ? "light_mode" : "dark_mode"}
+                  </motion.span>
+                </button>
+              </SimpleTooltip>
             </div>
           </header>
 

@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { SimpleTooltip } from "../../../components/ui/tooltip";
 import "@aejkatappaja/phantom-ui";
 
 export default function RegexTester() {
@@ -97,27 +98,30 @@ export default function RegexTester() {
               <span className="text-muted-foreground ml-1">/</span>
             </div>
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => toggleFlag("g")}
-                className={`px-3 py-2 rounded-lg font-mono text-sm font-semibold border transition-colors ${flags.g ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground border-border hover:border-primary/50"}`}
-                title="Global search (g)"
-              >
-                g
-              </button>
-              <button
-                onClick={() => toggleFlag("i")}
-                className={`px-3 py-2 rounded-lg font-mono text-sm font-semibold border transition-colors ${flags.i ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground border-border hover:border-primary/50"}`}
-                title="Case-insensitive search (i)"
-              >
-                i
-              </button>
-              <button
-                onClick={() => toggleFlag("m")}
-                className={`px-3 py-2 rounded-lg font-mono text-sm font-semibold border transition-colors ${flags.m ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground border-border hover:border-primary/50"}`}
-                title="Multi-line search (m)"
-              >
-                m
-              </button>
+              <SimpleTooltip content="Global search (g)" side="top">
+                <button
+                  onClick={() => toggleFlag("g")}
+                  className={`px-3 py-2 rounded-lg font-mono text-sm font-semibold border transition-colors ${flags.g ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground border-border hover:border-primary/50"}`}
+                >
+                  g
+                </button>
+              </SimpleTooltip>
+              <SimpleTooltip content="Case-insensitive search (i)" side="top">
+                <button
+                  onClick={() => toggleFlag("i")}
+                  className={`px-3 py-2 rounded-lg font-mono text-sm font-semibold border transition-colors ${flags.i ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground border-border hover:border-primary/50"}`}
+                >
+                  i
+                </button>
+              </SimpleTooltip>
+              <SimpleTooltip content="Multi-line search (m)" side="top">
+                <button
+                  onClick={() => toggleFlag("m")}
+                  className={`px-3 py-2 rounded-lg font-mono text-sm font-semibold border transition-colors ${flags.m ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground border-border hover:border-primary/50"}`}
+                >
+                  m
+                </button>
+              </SimpleTooltip>
             </div>
           </div>
           {error && (

@@ -53,3 +53,16 @@ function TooltipContent({
 }
 
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger }
+
+export function SimpleTooltip({ children, content, side = "top" }: { children: React.ReactNode, content: React.ReactNode, side?: "top" | "bottom" | "left" | "right" }) {
+  return (
+    <Tooltip delayDuration={300}>
+      <TooltipTrigger asChild>
+        {children}
+      </TooltipTrigger>
+      <TooltipContent side={side}>
+        {content}
+      </TooltipContent>
+    </Tooltip>
+  )
+}
