@@ -1,23 +1,25 @@
-import { createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
+import { createRootRoute, createRoute, createRouter, lazyRouteComponent } from "@tanstack/react-router";
 
 // Import Layout (App)
 import App from "./App";
 
-// Import Pages
+// Import Pages (Keep Home statically imported for fast first paint)
 import Home from "./pages/home";
-import TextCaseConverter from "./pages/text/case-converter";
-import DiffChecker from "./pages/text/diff-checker";
-import Base64Converter from "./pages/encoders/base64";
-import HashGenerator from "./pages/encoders/hash-generator";
-import JwtDecoder from "./pages/encoders/jwt";
-import CodeFormatter from "./pages/formatter";
-import UuidGenerator from "./pages/uuid";
-import UrlEncoder from "./pages/encoders/url-encoder";
-import RegexTester from "./pages/developer/regex-tester";
-import TimestampConverter from "./pages/developer/timestamp";
-import RequestBuilder from "./pages/generators/request-builder";
-import ApiTester from "./pages/developer/api-tester";
-import JsonQueryConverter from "./pages/developer/json-query";
+
+// Lazy load tools
+const TextCaseConverter = lazyRouteComponent(() => import("./pages/text/case-converter"));
+const DiffChecker = lazyRouteComponent(() => import("./pages/text/diff-checker"));
+const Base64Converter = lazyRouteComponent(() => import("./pages/encoders/base64"));
+const HashGenerator = lazyRouteComponent(() => import("./pages/encoders/hash-generator"));
+const JwtDecoder = lazyRouteComponent(() => import("./pages/encoders/jwt"));
+const CodeFormatter = lazyRouteComponent(() => import("./pages/formatter"));
+const UuidGenerator = lazyRouteComponent(() => import("./pages/uuid"));
+const UrlEncoder = lazyRouteComponent(() => import("./pages/encoders/url-encoder"));
+const RegexTester = lazyRouteComponent(() => import("./pages/developer/regex-tester"));
+const TimestampConverter = lazyRouteComponent(() => import("./pages/developer/timestamp"));
+const RequestBuilder = lazyRouteComponent(() => import("./pages/generators/request-builder"));
+const ApiTester = lazyRouteComponent(() => import("./pages/developer/api-tester"));
+const JsonQueryConverter = lazyRouteComponent(() => import("./pages/developer/json-query"));
 
 // Create root route with App as component
 const rootRoute = createRootRoute({
