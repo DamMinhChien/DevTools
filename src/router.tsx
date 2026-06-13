@@ -16,6 +16,7 @@ import UrlEncoder from "./pages/encoders/url-encoder";
 import RegexTester from "./pages/developer/regex-tester";
 import TimestampConverter from "./pages/developer/timestamp";
 import RequestBuilder from "./pages/generators/request-builder";
+import ApiTester from "./pages/developer/api-tester";
 
 // Create root route with App as component
 const rootRoute = createRootRoute({
@@ -107,6 +108,13 @@ const requestBuilderRoute = createRoute({
   staticData: { title: "Request Builder" },
 });
 
+const apiTesterRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/api-tester",
+  component: ApiTester,
+  staticData: { title: "API Tester" },
+});
+
 // Build route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -121,6 +129,7 @@ const routeTree = rootRoute.addChildren([
   regexTesterRoute,
   timestampRoute,
   requestBuilderRoute,
+  apiTesterRoute,
 ]);
 
 // Create and export router instance

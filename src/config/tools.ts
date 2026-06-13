@@ -139,6 +139,15 @@ export const toolCategories: Category[] = [
         color: "bg-purple-500",
         disabled: false,
         keywords: ["regex", "biểu thức", "chính quy", "test", "match"]
+      },
+      {
+        id: "api-tester",
+        name: "API Tester (Mini Postman)",
+        description: "Gửi HTTP Request, kiểm thử API nhanh chóng ngay trên trình duyệt.",
+        icon: "send",
+        color: "bg-cyan-500",
+        disabled: false,
+        keywords: ["api", "postman", "request", "http", "fetch", "axios", "tester", "test"]
       }
     ]
   }

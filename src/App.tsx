@@ -393,6 +393,29 @@ function App() {
                     )}
                   </AnimatePresence>
                 </Link>
+
+                <Link
+                  to="/api-tester"
+                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
+                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
+                  title="API Tester"
+                >
+                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">send</motion.span>
+                  <AnimatePresence>
+                    {isSidebarOpen && (
+                      <motion.span 
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="truncate"
+                      >
+                        API Tester
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Link>
               </div>
             </div>
 
