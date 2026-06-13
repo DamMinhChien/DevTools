@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useAppStore } from "./store/useAppStore";
 import { useHotkeys } from "react-hotkeys-hook";
+import { motion, AnimatePresence } from "framer-motion";
 import TextCaseConverter from "./pages/text/case-converter";
 import Base64Converter from "./pages/encoders/base64";
 import HashGenerator from "./pages/encoders/hash-generator";
@@ -30,24 +31,36 @@ function App() {
   return (
     <div className="flex h-screen bg-background text-foreground font-display overflow-hidden">
       {/* Sidebar */}
-      <aside 
-        className={`fixed left-0 top-0 h-full bg-card border-r border-border shadow-sm flex flex-col py-4 z-40 transition-all duration-300 ease-in-out ${
+      <motion.aside 
+        layout
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className={`fixed left-0 top-0 h-full bg-card border-r border-border shadow-sm flex flex-col py-4 z-40 ${
           isSidebarOpen ? "w-64 translate-x-0" : "w-64 -translate-x-full md:translate-x-0 md:w-16"
         }`}
       >
         {/* Brand Header */}
         <div 
           onClick={() => setActiveToolId('home')}
-          className={`px-4 mb-6 flex items-center cursor-pointer hover:opacity-80 transition-opacity ${isSidebarOpen ? "justify-start gap-3" : "justify-center"} overflow-hidden whitespace-nowrap`}
+          className={`px-4 mb-6 flex items-center cursor-pointer hover:opacity-80 transition-opacity overflow-hidden whitespace-nowrap ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
         >
-          <div className="w-8 h-8 shrink-0 bg-primary rounded flex items-center justify-center">
+          <motion.div layout className="w-8 h-8 shrink-0 bg-primary rounded flex items-center justify-center">
             <span className="material-symbols-outlined text-primary-foreground text-xl">
               terminal
             </span>
-          </div>
-          <div className={`transition-all duration-200 ${isSidebarOpen ? "opacity-100 w-auto" : "opacity-0 w-0 hidden"}`}>
-            <h1 className="text-xl font-bold text-foreground leading-none">DevTools</h1>
-          </div>
+          </motion.div>
+          <AnimatePresence>
+            {isSidebarOpen && (
+              <motion.div 
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <h1 className="text-xl font-bold text-foreground leading-none">DevTools</h1>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Navigation */}
@@ -62,17 +75,38 @@ function App() {
             } ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
             title="Trang chủ"
           >
-            <span className="material-symbols-outlined shrink-0 text-lg">home</span>
-            <span className={`truncate transition-opacity duration-200 ${isSidebarOpen ? "opacity-100" : "opacity-0 hidden"}`}>
-              Trang chủ
-            </span>
+            <motion.span layout className="material-symbols-outlined shrink-0 text-lg">home</motion.span>
+            <AnimatePresence>
+              {isSidebarOpen && (
+                <motion.span 
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "auto" }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="truncate"
+                >
+                  Trang chủ
+                </motion.span>
+              )}
+            </AnimatePresence>
           </button>
 
           {/* Group: Text Tools */}
           <div className="pt-2">
-            <div className={`px-2 py-2 text-xs font-semibold text-primary/60 uppercase tracking-widest transition-opacity duration-200 ${isSidebarOpen ? "opacity-100" : "opacity-0 hidden"}`}>
-              Công cụ Văn bản
-            </div>
+            <AnimatePresence>
+              {isSidebarOpen ? (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="px-2 py-2 text-xs font-semibold text-primary/60 uppercase tracking-widest overflow-hidden"
+                >
+                  Công cụ Văn bản
+                </motion.div>
+              ) : (
+                <div className="h-4" /> // Spacer for closed state
+              )}
+            </AnimatePresence>
             
             <div className="mt-1 space-y-1">
               <button
@@ -84,19 +118,40 @@ function App() {
                 } ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
                 title="Chuyển đổi kiểu chữ"
               >
-                <span className="material-symbols-outlined shrink-0 text-lg">text_fields</span>
-                <span className={`truncate transition-opacity duration-200 ${isSidebarOpen ? "opacity-100" : "opacity-0 hidden"}`}>
-                  Chuyển đổi kiểu chữ
-                </span>
+                <motion.span layout className="material-symbols-outlined shrink-0 text-lg">text_fields</motion.span>
+                <AnimatePresence>
+                  {isSidebarOpen && (
+                    <motion.span 
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="truncate"
+                    >
+                      Chuyển đổi kiểu chữ
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </button>
             </div>
           </div>
 
           {/* Group: Encoders */}
           <div className="pt-2">
-            <div className={`px-2 py-2 text-xs font-semibold text-primary/60 uppercase tracking-widest transition-opacity duration-200 ${isSidebarOpen ? "opacity-100" : "opacity-0 hidden"}`}>
-              Mã hóa & Giải mã
-            </div>
+            <AnimatePresence>
+              {isSidebarOpen ? (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="px-2 py-2 text-xs font-semibold text-primary/60 uppercase tracking-widest overflow-hidden"
+                >
+                  Mã hóa & Giải mã
+                </motion.div>
+              ) : (
+                <div className="h-4" />
+              )}
+            </AnimatePresence>
             
             <div className="mt-1 space-y-1">
               <button
@@ -108,10 +163,20 @@ function App() {
                 } ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
                 title="Base64 Encoder"
               >
-                <span className="material-symbols-outlined shrink-0 text-lg">data_object</span>
-                <span className={`truncate transition-opacity duration-200 ${isSidebarOpen ? "opacity-100" : "opacity-0 hidden"}`}>
-                  Base64 Encoder
-                </span>
+                <motion.span layout className="material-symbols-outlined shrink-0 text-lg">data_object</motion.span>
+                <AnimatePresence>
+                  {isSidebarOpen && (
+                    <motion.span 
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="truncate"
+                    >
+                      Base64 Encoder
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </button>
               
               <button
@@ -123,19 +188,31 @@ function App() {
                 } ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
                 title="Hash Generator"
               >
-                <span className="material-symbols-outlined shrink-0 text-lg">tag</span>
-                <span className={`truncate transition-opacity duration-200 ${isSidebarOpen ? "opacity-100" : "opacity-0 hidden"}`}>
-                  Hash Generator
-                </span>
+                <motion.span layout className="material-symbols-outlined shrink-0 text-lg">tag</motion.span>
+                <AnimatePresence>
+                  {isSidebarOpen && (
+                    <motion.span 
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="truncate"
+                    >
+                      Hash Generator
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </button>
             </div>
           </div>
         </nav>
-      </aside>
+      </motion.aside>
 
       {/* Main Content Shell */}
-      <div 
-        className={`flex flex-col h-screen w-full transition-all duration-300 ease-in-out ${
+      <motion.div 
+        layout
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className={`flex flex-col h-screen w-full ${
           isSidebarOpen ? "md:ml-64" : "md:ml-16"
         }`}
       >
@@ -173,9 +250,14 @@ function App() {
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               title="Chế độ Sáng/Tối"
             >
-              <span className="material-symbols-outlined text-muted-foreground group-hover:text-primary">
+              <motion.span 
+                initial={{ rotate: 0 }}
+                animate={{ rotate: theme === "dark" ? 360 : 0 }}
+                transition={{ duration: 0.5 }}
+                className="material-symbols-outlined text-muted-foreground group-hover:text-primary"
+              >
                 {theme === "dark" ? "light_mode" : "dark_mode"}
-              </span>
+              </motion.span>
             </button>
           </div>
         </header>
@@ -187,7 +269,7 @@ function App() {
           {activeToolId === 'base64' && <Base64Converter />}
           {activeToolId === 'hash-generator' && <HashGenerator />}
         </main>
-      </div>
+      </motion.div>
     </div>
   );
 }
