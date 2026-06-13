@@ -4,31 +4,28 @@ import { v4 as uuidv4, v7 as uuidv7 } from "uuid";
 import CodeEditor from "../../components/CodeEditor";
 
 type UuidVersion = "v4" | "v7";
-type UuidFormat = "standard" | "uppercase" | "no-dashes" | "braces";
+
 
 export default function UuidGenerator() {
   const [version, setVersion] = useState<UuidVersion>("v4");
-  const [format, setFormat] = useState<UuidFormat>("standard");
-  const [quantity, setQuantity] = useState<number>(5);
+  const [quantity, setQuantity] = useState<number>(1);
   const [output, setOutput] = useState<string>("");
   const [copied, setCopied] = useState(false);
-
-  const formatUuid = (uuid: string, fmt: UuidFormat) => {
-    let formatted = uuid;
-    if (fmt === "uppercase") formatted = formatted.toUpperCase();
-    if (fmt === "no-dashes") formatted = formatted.replace(/-/g, "");
-    if (fmt === "braces") formatted = `{${formatted}}`;
-    return formatted;
-  };
 
   const handleGenerate = useCallback(() => {
     let result = "";
     for (let i = 0; i < quantity; i++) {
       const rawUuid = version === "v4" ? uuidv4() : uuidv7();
-      result += formatUuid(rawUuid, format) + "\n";
+      if (quantity > 1) {
+        result += `// --- UUID ${i + 1} ---\n`;
+      }
+      result += `${rawUuid} (Standard)\n`;
+      result += `${rawUuid.toUpperCase()} (Uppercase)\n`;
+      result += `${rawUuid.replace(/-/g, "")} (No dashes)\n`;
+      result += `{${rawUuid}} (Braces)\n\n`;
     }
     setOutput(result.trimEnd());
-  }, [version, format, quantity]);
+  }, [version, quantity]);
 
   const handleCopy = useCallback(() => {
     if (!output) return;
@@ -51,7 +48,9 @@ export default function UuidGenerator() {
       </header>
 
       {/* Controls */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-card p-4 rounded-xl border border-border">
+
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-card p-4 rounded-xl border border-border">
         {/* Version */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-semibold text-muted-foreground">Phiên bản</label>
@@ -62,21 +61,6 @@ export default function UuidGenerator() {
           >
             <option value="v4">UUID v4 (Random)</option>
             <option value="v7">UUID v7 (Time-based)</option>
-          </select>
-        </div>
-
-        {/* Format */}
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-muted-foreground">Định dạng</label>
-          <select
-            value={format}
-            onChange={(e) => setFormat(e.target.value as UuidFormat)}
-            className="w-full bg-muted/50 border border-border rounded-lg px-3 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 text-foreground"
-          >
-            <option value="standard">Chuẩn (Có gạch nối)</option>
-            <option value="uppercase">In hoa (UPPERCASE)</option>
-            <option value="no-dashes">Không gạch nối (xxxxxxxx...)</option>
-            <option value="braces">Trong ngoặc nhọn {"{...}"}</option>
           </select>
         </div>
 

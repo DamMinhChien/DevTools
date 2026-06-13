@@ -64,6 +64,23 @@ export const toolCategories: Category[] = [
         disabled: false,
         keywords: ["base64", "encode", "decode", "mã hóa", "giải mã"]
       },
+
+      {
+        id: "jwt",
+        name: "JWT Decoder",
+        description: "Giải mã token JWT để xem header và payload.",
+        icon: "lock_open",
+        color: "bg-purple-500",
+        disabled: false,
+        keywords: ["jwt", "token", "decode", "giải mã", "json web token", "auth"]
+      }
+    ]
+  },
+  {
+    id: "generators",
+    name: "Trình Tạo Dữ Liệu",
+    icon: "autorenew",
+    tools: [
       {
         id: "hash-generator",
         name: "Hash Generator",
@@ -74,13 +91,13 @@ export const toolCategories: Category[] = [
         keywords: ["hash", "md5", "sha", "băm", "generator", "tạo"]
       },
       {
-        id: "jwt",
-        name: "JWT Decoder",
-        description: "Giải mã token JWT để xem header và payload.",
-        icon: "lock_open",
-        color: "bg-purple-500",
+        id: "uuid-generator",
+        name: "UUID Generator",
+        description: "Sinh mã UUID v4 và v7 ngẫu nhiên với nhiều định dạng.",
+        icon: "fingerprint",
+        color: "bg-teal-500",
         disabled: false,
-        keywords: ["jwt", "token", "decode", "giải mã", "json web token", "auth"]
+        keywords: ["uuid", "guid", "generator", "sinh", "tạo", "random", "v4", "v7"]
       }
     ]
   },
@@ -106,15 +123,6 @@ export const toolCategories: Category[] = [
         color: "bg-purple-500",
         disabled: true,
         keywords: ["regex", "biểu thức", "chính quy", "test", "match"]
-      },
-      {
-        id: "uuid-generator",
-        name: "UUID Generator",
-        description: "Sinh mã UUID v4 và v7 ngẫu nhiên với nhiều định dạng.",
-        icon: "fingerprint",
-        color: "bg-teal-500",
-        disabled: false,
-        keywords: ["uuid", "guid", "generator", "sinh", "tạo", "random", "v4", "v7"]
       }
     ]
   }
