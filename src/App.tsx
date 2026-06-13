@@ -9,7 +9,7 @@ import { useResponsiveSidebar } from "./hooks/useResponsiveSidebar";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
 import FallingEffect from "./components/FallingEffect";
-import { toolCategories } from "./config/tools";
+import { toolCategories, allTools } from "./config/tools";
 import { SimpleTooltip } from "./components/ui/tooltip";
 
 function App() {
@@ -63,10 +63,34 @@ function App() {
   const currentMatch = matches[matches.length - 1];
   const pageTitle = (currentMatch?.staticData?.title as string) || "DevTools";
 
+  // Tạo thông tin SEO tự động
+  const currentPath = currentMatch?.pathname || "/";
+  const matchedTool = allTools.find(t => `/${t.id}` === currentPath);
+  const description = matchedTool?.description || "DevTools - Bộ công cụ tối thượng dành cho Developer. Hỗ trợ Format Code, mã hóa/giải mã, Postboy API Tester, Regex Tester và nhiều tiện ích khác với giao diện siêu mượt.";
+  const keywords = matchedTool?.keywords?.join(", ") || "devtools, tools, lập trình viên, format code, json, base64, hash, uuid, api tester, web utilities";
+  const url = `https://dev-tools-chi-one.vercel.app${currentPath}`;
+  const fullTitle = pageTitle === "DevTools" ? pageTitle : `${pageTitle} | DevTools`;
+
   return (
     <>
       <Helmet>
-        <title>{pageTitle} | DevTools</title>
+        <title>{fullTitle}</title>
+        <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
+        <meta name="author" content="Đàm Minh Chiến" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={url} />
+        <meta property="og:title" content={fullTitle} />
+        <meta property="og:description" content={description} />
+        
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={url} />
+        <meta property="twitter:title" content={fullTitle} />
+        <meta property="twitter:description" content={description} />
+        <meta name="theme-color" content={theme === 'dark' ? '#09090b' : '#ffffff'} />
       </Helmet>
       <div {...swipeHandlers} className="flex h-screen bg-background text-foreground font-display overflow-hidden">
         
