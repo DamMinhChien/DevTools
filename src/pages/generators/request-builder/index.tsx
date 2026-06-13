@@ -18,6 +18,8 @@ export default function RequestBuilder() {
     { id: uuidv4(), key: "", value: "", enabled: true }
   ]);
   const [outputFormat, setOutputFormat] = useState<"json" | "form">("json");
+  const [inputMode, setInputMode] = useState<"form" | "raw">("form");
+  const [rawJson, setRawJson] = useState<string>("{\n  \n}");
   
   // HMAC State
   const [secretKey, setSecretKey] = useState("");
@@ -42,7 +44,55 @@ export default function RequestBuilder() {
     setParams(prev => prev.map(p => p.id === id ? { ...p, enabled: !p.enabled } : p));
   };
 
-  const activeParams = useMemo(() => params.filter(p => p.enabled && p.key.trim() !== ""), [params]);
+  const handleModeChange = (newMode: "form" | "raw") => {
+    if (newMode === "raw" && inputMode === "form") {
+      // Sync Form -> Raw
+      const activeP = params.filter(p => p.enabled && p.key.trim() !== "");
+      const obj = activeP.reduce((acc, p) => {
+        acc[p.key] = p.value;
+        return acc;
+      }, {} as Record<string, string>);
+      setRawJson(JSON.stringify(obj, null, 2));
+    } else if (newMode === "form" && inputMode === "raw") {
+      // Sync Raw -> Form
+      try {
+        const parsed = JSON.parse(rawJson);
+        if (typeof parsed === "object" && parsed !== null) {
+          const newParams = Object.entries(parsed).map(([k, v]) => ({
+            id: uuidv4(),
+            key: k,
+            value: typeof v === "object" ? JSON.stringify(v) : String(v),
+            enabled: true
+          }));
+          setParams(newParams.length > 0 ? newParams : [{ id: uuidv4(), key: "", value: "", enabled: true }]);
+        }
+      } catch(e) {
+        // Ignored if invalid json
+      }
+    }
+    setInputMode(newMode);
+  };
+
+  const activeParams = useMemo(() => {
+    if (inputMode === "form") {
+      return params.filter(p => p.enabled && p.key.trim() !== "");
+    } else {
+      try {
+        const parsed = JSON.parse(rawJson);
+        if (typeof parsed === "object" && parsed !== null) {
+          return Object.entries(parsed).map(([k, v]) => ({
+            id: k,
+            key: k,
+            value: typeof v === "object" ? JSON.stringify(v) : String(v),
+            enabled: true
+          })).filter(p => p.key.trim() !== "");
+        }
+      } catch (e) {
+        return [];
+      }
+      return [];
+    }
+  }, [inputMode, params, rawJson]);
 
   const generatedPayload = useMemo(() => {
     if (activeParams.length === 0) return outputFormat === "json" ? "{}" : "";
@@ -116,48 +166,77 @@ export default function RequestBuilder() {
                   <span className="material-symbols-outlined text-[18px]">list_alt</span>
                   Dữ liệu (Params / Body)
                 </span>
-                <button
-                  onClick={handleAddParam}
-                  className="px-3 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded hover:bg-primary/90 transition-colors flex items-center gap-1"
-                >
-                  <span className="material-symbols-outlined text-[14px]">add</span>
-                  Thêm dòng
-                </button>
-              </div>
-              
-              <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                {params.map((p) => (
-                  <div key={p.id} className="flex items-center gap-2 group">
-                    <input 
-                      type="checkbox" 
-                      checked={p.enabled}
-                      onChange={() => handleToggleParam(p.id)}
-                      className="w-4 h-4 cursor-pointer accent-primary"
-                    />
-                    <input 
-                      type="text" 
-                      value={p.key}
-                      onChange={e => handleParamChange(p.id, "key", e.target.value)}
-                      placeholder="Key"
-                      className="flex-1 bg-muted/50 border border-border rounded-md px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary/50"
-                    />
-                    <span className="text-muted-foreground">=</span>
-                    <input 
-                      type="text" 
-                      value={p.value}
-                      onChange={e => handleParamChange(p.id, "value", e.target.value)}
-                      placeholder="Value"
-                      className="flex-1 bg-muted/50 border border-border rounded-md px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary/50"
-                    />
-                    <button 
-                      onClick={() => handleRemoveParam(p.id)}
-                      className="text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 p-1"
+                <div className="flex gap-2 items-center">
+                  <div className="flex bg-muted/50 rounded-md p-0.5 border border-border">
+                    <button
+                      onClick={() => handleModeChange("form")}
+                      className={`px-3 py-1 text-xs font-semibold rounded-sm transition-all ${inputMode === "form" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
                     >
-                      <span className="material-symbols-outlined text-[18px]">close</span>
+                      Bảng (Form)
+                    </button>
+                    <button
+                      onClick={() => handleModeChange("raw")}
+                      className={`px-3 py-1 text-xs font-semibold rounded-sm transition-all ${inputMode === "raw" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                    >
+                      JSON Raw
                     </button>
                   </div>
-                ))}
+                  {inputMode === "form" && (
+                    <button
+                      onClick={handleAddParam}
+                      className="px-3 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded hover:bg-primary/90 transition-colors flex items-center gap-1"
+                    >
+                      <span className="material-symbols-outlined text-[14px]">add</span>
+                      Thêm
+                    </button>
+                  )}
+                </div>
               </div>
+              
+              {inputMode === "form" ? (
+                <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                  {params.map((p) => (
+                    <div key={p.id} className="flex items-center gap-2 group">
+                      <input 
+                        type="checkbox" 
+                        checked={p.enabled}
+                        onChange={() => handleToggleParam(p.id)}
+                        className="w-4 h-4 cursor-pointer accent-primary"
+                      />
+                      <input 
+                        type="text" 
+                        value={p.key}
+                        onChange={e => handleParamChange(p.id, "key", e.target.value)}
+                        placeholder="Key"
+                        className="flex-1 bg-muted/50 border border-border rounded-md px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary/50"
+                      />
+                      <span className="text-muted-foreground">=</span>
+                      <input 
+                        type="text" 
+                        value={p.value}
+                        onChange={e => handleParamChange(p.id, "value", e.target.value)}
+                        placeholder="Value"
+                        className="flex-1 bg-muted/50 border border-border rounded-md px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary/50"
+                      />
+                      <button 
+                        onClick={() => handleRemoveParam(p.id)}
+                        className="text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 p-1"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">close</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex-1 relative p-1">
+                  <textarea
+                    className="w-full h-full p-3 font-mono text-sm bg-transparent border-none outline-none resize-none text-foreground"
+                    placeholder="Paste JSON vào đây..."
+                    value={rawJson}
+                    onChange={e => setRawJson(e.target.value)}
+                  />
+                </div>
+              )}
             </div>
             
             {/* HMAC Config */}
