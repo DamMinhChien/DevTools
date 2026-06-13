@@ -297,19 +297,13 @@ function App() {
               <SimpleTooltip content="Đóng/Mở Sidebar (Cmd+B)" side="bottom">
                 <button 
                   onClick={toggleSidebar}
-                  className="p-2 hover:bg-muted rounded-md transition-colors text-muted-foreground hover:text-foreground"
+                  className="p-2 hover:bg-muted rounded-md transition-colors text-muted-foreground hover:text-foreground hidden md:block"
                 >
                   <span className="material-symbols-outlined">
                     {isSidebarOpen ? "menu_open" : "menu"}
                   </span>
                 </button>
               </SimpleTooltip>
-
-              {/* Mobile Title (Chỉ hiện trên mobile vì mất Sidebar) */}
-              <div className="md:hidden font-bold text-lg tracking-tight flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-xl">terminal</span>
-                DevTools
-              </div>
 
               {/* Global Search Bar (Fake trigger) */}
               <div 
