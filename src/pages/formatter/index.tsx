@@ -9,66 +9,226 @@ import parserTypescript from "prettier/plugins/typescript";
 import parserHtml from "prettier/plugins/html";
 import parserCss from "prettier/plugins/postcss";
 import parserMarkdown from "prettier/plugins/markdown";
+import parserYaml from "prettier/plugins/yaml";
+import parserGraphql from "prettier/plugins/graphql";
+import parserJava from "prettier-plugin-java";
+import { format as sqlFormat } from "sql-formatter";
+
+// ─── Smart indenter cho ngôn ngữ không có prettier plugin ─────────────────────
+// Dành cho C#, Go, Rust, C/C++, Swift, Kotlin (curly-brace langs)
+function smartIndentBracket(code: string, tabWidth = 4): string {
+  const lines = code.split("\n").map((l) => l.trim());
+  let indent = 0;
+  const result: string[] = [];
+  const tab = " ".repeat(tabWidth);
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line) { result.push(""); continue; }
+
+    // Giảm indent nếu dòng bắt đầu bằng }
+    const closeCount = (line.match(/^[}\])]/) ? 1 : 0);
+    if (closeCount) indent = Math.max(0, indent - 1);
+
+    result.push(tab.repeat(indent) + line);
+
+    // Tăng indent nếu dòng kết thúc bằng {
+    const openCount = (line.match(/[{(\[]$/) ? 1 : 0);
+    const closeInLine = (line.match(/}/) ? 1 : 0);
+    if (openCount && !closeInLine) indent++;
+  }
+  return result.join("\n");
+}
+
+// Smart indent cho Python (dựa vào dấu :)
+function smartIndentPython(code: string): string {
+  const lines = code.split("\n").map((l) => l.trimEnd());
+  let indent = 0;
+  const result: string[] = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) { result.push(""); continue; }
+
+    // Giảm indent nếu là else/elif/except/finally/case
+    if (/^(else|elif|except|finally|case)\b/.test(trimmed)) {
+      indent = Math.max(0, indent - 1);
+    }
+
+    result.push("    ".repeat(indent) + trimmed);
+
+    // Tăng indent nếu dòng kết thúc bằng :
+    if (trimmed.endsWith(":") && !trimmed.startsWith("#")) {
+      indent++;
+    }
+  }
+  return result.join("\n");
+}
+
+// ─── Kiểu format: prettier | sql | smart-bracket | smart-python ───────────────
+type FormatEngine = "prettier" | "sql" | "smart-bracket" | "smart-python";
 
 // ─── Cấu hình ngôn ngữ được hỗ trợ ───────────────────────────────────────────
 interface LangConfig {
   label: string;
-  parser: string;
-  plugins: Plugin[];
+  engine: FormatEngine;
+  parser?: string;
+  plugins?: Plugin[];
   extensions: string[];
-  icon: string;
   color: string;
+  group: string; // nhóm hiển thị
 }
 
 const LANG_CONFIGS: Record<string, LangConfig> = {
+  // ── Web ───────────────────────────────────────────────────────────────────────
   json: {
     label: "JSON",
+    engine: "prettier",
     parser: "json",
     plugins: [parserBabel, parserEstree],
-    extensions: [".json"],
-    icon: "data_object",
+    extensions: [".json", ".jsonc"],
     color: "bg-yellow-500",
+    group: "Web",
   },
   javascript: {
     label: "JavaScript",
+    engine: "prettier",
     parser: "babel",
     plugins: [parserBabel, parserEstree],
     extensions: [".js", ".mjs", ".cjs", ".jsx"],
-    icon: "javascript",
     color: "bg-yellow-400",
+    group: "Web",
   },
   typescript: {
     label: "TypeScript",
+    engine: "prettier",
     parser: "typescript",
     plugins: [parserTypescript, parserEstree],
     extensions: [".ts", ".tsx", ".mts", ".cts"],
-    icon: "code",
     color: "bg-blue-500",
+    group: "Web",
   },
   html: {
     label: "HTML",
+    engine: "prettier",
     parser: "html",
     plugins: [parserHtml],
     extensions: [".html", ".htm"],
-    icon: "html",
     color: "bg-orange-500",
+    group: "Web",
   },
   css: {
     label: "CSS / SCSS",
+    engine: "prettier",
     parser: "css",
     plugins: [parserCss],
     extensions: [".css", ".scss", ".less"],
-    icon: "palette",
     color: "bg-purple-500",
+    group: "Web",
+  },
+  graphql: {
+    label: "GraphQL",
+    engine: "prettier",
+    parser: "graphql",
+    plugins: [parserGraphql],
+    extensions: [".graphql", ".gql"],
+    color: "bg-pink-500",
+    group: "Web",
+  },
+  // ── Backend ───────────────────────────────────────────────────────────────────
+  java: {
+    label: "Java",
+    engine: "prettier",
+    parser: "java",
+    plugins: [parserJava as unknown as Plugin],
+    extensions: [".java"],
+    color: "bg-red-500",
+    group: "Backend",
+  },
+  csharp: {
+    label: "C#",
+    engine: "smart-bracket",
+    extensions: [".cs"],
+    color: "bg-violet-600",
+    group: "Backend",
+  },
+  python: {
+    label: "Python",
+    engine: "smart-python",
+    extensions: [".py", ".pyw"],
+    color: "bg-blue-400",
+    group: "Backend",
+  },
+  go: {
+    label: "Go",
+    engine: "smart-bracket",
+    extensions: [".go"],
+    color: "bg-cyan-500",
+    group: "Backend",
+  },
+  rust: {
+    label: "Rust",
+    engine: "smart-bracket",
+    extensions: [".rs"],
+    color: "bg-orange-600",
+    group: "Backend",
+  },
+  kotlin: {
+    label: "Kotlin",
+    engine: "smart-bracket",
+    extensions: [".kt", ".kts"],
+    color: "bg-purple-400",
+    group: "Backend",
+  },
+  swift: {
+    label: "Swift",
+    engine: "smart-bracket",
+    extensions: [".swift"],
+    color: "bg-orange-400",
+    group: "Backend",
+  },
+  // ── Systems ───────────────────────────────────────────────────────────────────
+  cpp: {
+    label: "C / C++",
+    engine: "smart-bracket",
+    extensions: [".c", ".cpp", ".cc", ".cxx", ".h", ".hpp"],
+    color: "bg-blue-600",
+    group: "Systems",
+  },
+  // ── Data ─────────────────────────────────────────────────────────────────────
+  sql: {
+    label: "SQL",
+    engine: "sql",
+    extensions: [".sql"],
+    color: "bg-emerald-500",
+    group: "Data",
+  },
+  yaml: {
+    label: "YAML",
+    engine: "prettier",
+    parser: "yaml",
+    plugins: [parserYaml],
+    extensions: [".yaml", ".yml"],
+    color: "bg-amber-400",
+    group: "Data",
   },
   markdown: {
     label: "Markdown",
+    engine: "prettier",
     parser: "markdown",
     plugins: [parserMarkdown],
     extensions: [".md", ".mdx"],
-    icon: "description",
     color: "bg-teal-500",
+    group: "Data",
   },
+};
+
+// Group theo nhóm để hiển thị
+const LANG_GROUPS: Record<string, string[]> = {
+  Web: ["json", "javascript", "typescript", "html", "css", "graphql"],
+  Backend: ["java", "csharp", "python", "go", "rust", "kotlin", "swift"],
+  Systems: ["cpp"],
+  Data: ["sql", "yaml", "markdown"],
 };
 
 // Detect language from file extension
@@ -143,14 +303,27 @@ export default function CodeFormatter() {
     }
 
     try {
-      const result = await prettier.format(code, {
-        parser: cfg.parser,
-        plugins: cfg.plugins,
-        semi: true,
-        singleQuote: false,
-        tabWidth: 2,
-        printWidth: 100,
-      });
+      let result: string;
+
+      if (cfg.engine === "prettier") {
+        result = await prettier.format(code, {
+          parser: cfg.parser,
+          plugins: cfg.plugins,
+          semi: true,
+          singleQuote: false,
+          tabWidth: 2,
+          printWidth: 100,
+        });
+      } else if (cfg.engine === "sql") {
+        result = sqlFormat(code, { language: "sql", tabWidth: 2 });
+      } else if (cfg.engine === "smart-bracket") {
+        result = smartIndentBracket(code, 4);
+      } else if (cfg.engine === "smart-python") {
+        result = smartIndentPython(code);
+      } else {
+        throw new Error("Engine không xác định");
+      }
+
       setOutput(result);
       setStatus("success");
     } catch (err: unknown) {
@@ -235,22 +408,38 @@ export default function CodeFormatter() {
         ))}
       </div>
 
-      {/* Language Selector (chỉ hiện ở paste mode) */}
+      {/* Language Selector (chỉ hiện ở paste mode) - Grouped */}
       {mode === "paste" && (
-        <div className="flex flex-wrap gap-2">
-          {Object.entries(LANG_CONFIGS).map(([key, c]) => (
-            <button
-              key={key}
-              onClick={() => setLang(key)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
-                lang === key
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
-              }`}
-            >
-              <span className={`w-2.5 h-2.5 rounded-full ${c.color}`} />
-              {c.label}
-            </button>
+        <div className="space-y-2">
+          {Object.entries(LANG_GROUPS).map(([group, keys]) => (
+            <div key={group} className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest w-16 shrink-0">
+                {group}
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {keys.map((key) => {
+                  const c = LANG_CONFIGS[key];
+                  if (!c) return null;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setLang(key)}
+                      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition-all ${
+                        lang === key
+                          ? "border-primary bg-primary/10 text-primary shadow-sm"
+                          : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                      }`}
+                    >
+                      <span className={`w-2 h-2 rounded-full shrink-0 ${c.color}`} />
+                      {c.label}
+                      {c.engine !== "prettier" && (
+                        <span className="text-[9px] opacity-50 font-normal">basic</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           ))}
         </div>
       )}
