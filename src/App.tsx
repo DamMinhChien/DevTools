@@ -107,29 +107,18 @@ function App() {
 
           {/* Group: Text Tools */}
           <div className="pt-2">
-            <div className="px-2 py-2 flex items-center justify-center h-8">
-              <AnimatePresence mode="wait">
-                {isSidebarOpen ? (
-                  <motion.div 
-                    key="open"
+            <div className="px-2 py-2 flex items-center h-8 text-blue-600 dark:text-blue-500 font-bold uppercase tracking-widest text-xs">
+              <span className={`material-symbols-outlined shrink-0 text-[18px] ${isSidebarOpen ? "mr-2" : "mx-auto"}`} title="Công cụ Văn bản">text_snippet</span>
+              <AnimatePresence>
+                {isSidebarOpen && (
+                  <motion.span 
                     initial={{ opacity: 0, width: 0 }}
                     animate={{ opacity: 1, width: "auto" }}
                     exit={{ opacity: 0, width: 0 }}
-                    className="text-xs font-semibold text-primary/60 uppercase tracking-widest overflow-hidden whitespace-nowrap w-full"
+                    className="overflow-hidden whitespace-nowrap"
                   >
                     Công cụ Văn bản
-                  </motion.div>
-                ) : (
-                  <motion.div 
-                    key="closed"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="text-muted-foreground/40 flex items-center justify-center w-full"
-                    title="Công cụ Văn bản"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">text_snippet</span>
-                  </motion.div>
+                  </motion.span>
                 )}
               </AnimatePresence>
             </div>
@@ -189,29 +178,18 @@ function App() {
 
           {/* Group: Encoders */}
           <div className="pt-2">
-            <div className="px-2 py-2 flex items-center justify-center h-8">
-              <AnimatePresence mode="wait">
-                {isSidebarOpen ? (
-                  <motion.div 
-                    key="open"
+            <div className="px-2 py-2 flex items-center h-8 text-blue-600 dark:text-blue-500 font-bold uppercase tracking-widest text-xs">
+              <span className={`material-symbols-outlined shrink-0 text-[18px] ${isSidebarOpen ? "mr-2" : "mx-auto"}`} title="Mã hóa & Giải mã">lock</span>
+              <AnimatePresence>
+                {isSidebarOpen && (
+                  <motion.span 
                     initial={{ opacity: 0, width: 0 }}
                     animate={{ opacity: 1, width: "auto" }}
                     exit={{ opacity: 0, width: 0 }}
-                    className="text-xs font-semibold text-primary/60 uppercase tracking-widest overflow-hidden whitespace-nowrap w-full"
+                    className="overflow-hidden whitespace-nowrap"
                   >
                     Mã hóa & Giải mã
-                  </motion.div>
-                ) : (
-                  <motion.div 
-                    key="closed"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="text-muted-foreground/40 flex items-center justify-center w-full"
-                    title="Mã hóa & Giải mã"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">lock</span>
-                  </motion.div>
+                  </motion.span>
                 )}
               </AnimatePresence>
             </div>
