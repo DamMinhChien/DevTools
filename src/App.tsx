@@ -116,8 +116,8 @@ function App() {
               drag="x"
               dragConstraints={{ left: -100, right: 0 }}
               dragElastic={0}
-              onDragEnd={(_, info) => {
-                if (info.offset.x < -20) {
+              onDrag={(_, info) => {
+                if (info.offset.x < -15) {
                   setSidebarOpen(false);
                 }
               }}
@@ -366,7 +366,7 @@ function App() {
         <motion.div 
           layout
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className={`flex flex-col h-screen w-full ${
+          className={`flex flex-col h-screen flex-1 min-w-0 ${
             isSidebarOpen ? "md:ml-64" : "md:ml-16"
           }`}
         >
