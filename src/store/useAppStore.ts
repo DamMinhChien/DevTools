@@ -17,6 +17,9 @@ interface AppState {
   
   isContactOpen: boolean;
   setContactOpen: (open: boolean) => void;
+
+  isFallingEffectActive: boolean;
+  toggleFallingEffect: () => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -35,6 +38,9 @@ export const useAppStore = create<AppState>()(
 
       isContactOpen: false,
       setContactOpen: (open) => set({ isContactOpen: open }),
+
+      isFallingEffectActive: false,
+      toggleFallingEffect: () => set((state) => ({ isFallingEffectActive: !state.isFallingEffectActive })),
     }),
     {
       name: "devtools-storage", // name of item in the storage (must be unique)
