@@ -282,6 +282,28 @@ function App() {
                     )}
                   </AnimatePresence>
                 </Link>
+                <Link
+                  to="/url-encoder"
+                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
+                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
+                  title="URL Encoder"
+                >
+                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">link</motion.span>
+                  <AnimatePresence>
+                    {isSidebarOpen && (
+                      <motion.span 
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="truncate"
+                      >
+                        URL Encoder
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Link>
               </div>
             </div>
 
@@ -326,6 +348,51 @@ function App() {
                   </AnimatePresence>
                 </Link>
 
+                <Link
+                  to="/regex-tester"
+                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
+                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
+                  title="Kiểm tra Regex"
+                >
+                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">regular_expression</motion.span>
+                  <AnimatePresence>
+                    {isSidebarOpen && (
+                      <motion.span 
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="truncate"
+                      >
+                        Kiểm tra Regex
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Link>
+
+                <Link
+                  to="/timestamp-converter"
+                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
+                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
+                  title="Unix Timestamp"
+                >
+                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">schedule</motion.span>
+                  <AnimatePresence>
+                    {isSidebarOpen && (
+                      <motion.span 
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="truncate"
+                      >
+                        Unix Timestamp
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Link>
               </div>
             </div>
 
@@ -388,6 +455,28 @@ function App() {
                         className="truncate"
                       >
                         UUID Generator
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Link>
+                <Link
+                  to="/request-builder"
+                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
+                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
+                  title="Request Builder"
+                >
+                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">api</motion.span>
+                  <AnimatePresence>
+                    {isSidebarOpen && (
+                      <motion.span 
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="truncate"
+                      >
+                        Request Builder
                       </motion.span>
                     )}
                   </AnimatePresence>

@@ -12,6 +12,10 @@ import HashGenerator from "./pages/encoders/hash-generator";
 import JwtDecoder from "./pages/encoders/jwt";
 import CodeFormatter from "./pages/formatter";
 import UuidGenerator from "./pages/uuid";
+import UrlEncoder from "./pages/encoders/url-encoder";
+import RegexTester from "./pages/developer/regex-tester";
+import TimestampConverter from "./pages/developer/timestamp";
+import RequestBuilder from "./pages/generators/request-builder";
 
 // Create root route with App as component
 const rootRoute = createRootRoute({
@@ -75,6 +79,34 @@ const uuidRoute = createRoute({
   staticData: { title: "UUID Generator" },
 });
 
+const urlEncoderRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/url-encoder",
+  component: UrlEncoder,
+  staticData: { title: "URL Encoder/Decoder" },
+});
+
+const regexTesterRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/regex-tester",
+  component: RegexTester,
+  staticData: { title: "Kiểm tra Regex" },
+});
+
+const timestampRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/timestamp-converter",
+  component: TimestampConverter,
+  staticData: { title: "Unix Timestamp" },
+});
+
+const requestBuilderRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/request-builder",
+  component: RequestBuilder,
+  staticData: { title: "Request Builder" },
+});
+
 // Build route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -85,6 +117,10 @@ const routeTree = rootRoute.addChildren([
   jwtRoute,
   codeFormatterRoute,
   uuidRoute,
+  urlEncoderRoute,
+  regexTesterRoute,
+  timestampRoute,
+  requestBuilderRoute,
 ]);
 
 // Create and export router instance

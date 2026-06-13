@@ -38,15 +38,6 @@ export const toolCategories: Category[] = [
         color: "bg-indigo-500",
         disabled: false,
         keywords: ["diff", "so sánh", "khác biệt", "compare", "text"]
-      },
-      {
-        id: "regex-tester",
-        name: "Kiểm tra Regex",
-        description: "Kiểm tra và kiểm thử biểu thức chính quy (Regular Expressions).",
-        icon: "regular_expression",
-        color: "bg-purple-500",
-        disabled: true,
-        keywords: ["regex", "biểu thức", "chính quy", "test", "match"]
       }
     ]
   },
@@ -64,7 +55,15 @@ export const toolCategories: Category[] = [
         disabled: false,
         keywords: ["base64", "encode", "decode", "mã hóa", "giải mã"]
       },
-
+      {
+        id: "url-encoder",
+        name: "URL Encoder",
+        description: "Mã hóa và giải mã chuỗi URL (encodeURIComponent).",
+        icon: "link",
+        color: "bg-sky-500",
+        disabled: false,
+        keywords: ["url", "encode", "decode", "mã hóa", "giải mã", "link"]
+      },
       {
         id: "jwt",
         name: "JWT Decoder",
@@ -97,7 +96,15 @@ export const toolCategories: Category[] = [
         icon: "fingerprint",
         color: "bg-teal-500",
         disabled: false,
-        keywords: ["uuid", "guid", "generator", "sinh", "tạo", "random", "v4", "v7"]
+      },
+      {
+        id: "request-builder",
+        name: "Request Builder",
+        description: "Tạo Payload (JSON/Form) và sinh chuỗi ký HMAC.",
+        icon: "api",
+        color: "bg-orange-500",
+        disabled: false,
+        keywords: ["request", "payload", "hmac", "json", "form", "api", "sign"]
       }
     ]
   },
@@ -116,12 +123,21 @@ export const toolCategories: Category[] = [
         keywords: ["format", "prettier", "code", "json", "javascript", "typescript", "html", "css", "markdown", "làm đẹp"]
       },
       {
+        id: "timestamp-converter",
+        name: "Unix Timestamp",
+        description: "Chuyển đổi qua lại giữa Unix Timestamp và Ngày giờ.",
+        icon: "schedule",
+        color: "bg-rose-500",
+        disabled: false,
+        keywords: ["time", "timestamp", "unix", "epoch", "date", "ngày giờ"]
+      },
+      {
         id: "regex-tester",
         name: "Kiểm tra Regex",
         description: "Kiểm tra và kiểm thử biểu thức chính quy (Regular Expressions).",
         icon: "regular_expression",
         color: "bg-purple-500",
-        disabled: true,
+        disabled: false,
         keywords: ["regex", "biểu thức", "chính quy", "test", "match"]
       }
     ]
