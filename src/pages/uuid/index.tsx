@@ -1,38 +1,45 @@
 import { useState, useCallback } from "react";
 import { v4 as uuidv4, v7 as uuidv7 } from "uuid";
 
-import CodeEditor from "../../components/CodeEditor";
-
 type UuidVersion = "v4" | "v7";
-
 
 export default function UuidGenerator() {
   const [version, setVersion] = useState<UuidVersion>("v4");
   const [quantity, setQuantity] = useState<number>(1);
-  const [output, setOutput] = useState<string>("");
-  const [copied, setCopied] = useState(false);
+  const [outputs, setOutputs] = useState([
+    { key: "Chuẩn (Có gạch nối)", value: "" },
+    { key: "In hoa (UPPERCASE)", value: "" },
+    { key: "Không gạch nối", value: "" },
+    { key: "Trong ngoặc nhọn", value: "" }
+  ]);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const handleGenerate = useCallback(() => {
-    let result = "";
+    const std = [];
+    const upp = [];
+    const nod = [];
+    const brc = [];
     for (let i = 0; i < quantity; i++) {
       const rawUuid = version === "v4" ? uuidv4() : uuidv7();
-      if (quantity > 1) {
-        result += `// --- UUID ${i + 1} ---\n`;
-      }
-      result += `${rawUuid} (Standard)\n`;
-      result += `${rawUuid.toUpperCase()} (Uppercase)\n`;
-      result += `${rawUuid.replace(/-/g, "")} (No dashes)\n`;
-      result += `{${rawUuid}} (Braces)\n\n`;
+      std.push(rawUuid);
+      upp.push(rawUuid.toUpperCase());
+      nod.push(rawUuid.replace(/-/g, ""));
+      brc.push(`{${rawUuid}}`);
     }
-    setOutput(result.trimEnd());
+    setOutputs([
+      { key: "Chuẩn (Có gạch nối)", value: std.join("\n") },
+      { key: "In hoa (UPPERCASE)", value: upp.join("\n") },
+      { key: "Không gạch nối", value: nod.join("\n") },
+      { key: "Trong ngoặc nhọn", value: brc.join("\n") }
+    ]);
   }, [version, quantity]);
 
-  const handleCopy = useCallback(() => {
-    if (!output) return;
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [output]);
+  const handleCopy = useCallback((key: string, value: string) => {
+    if (!value) return;
+    navigator.clipboard.writeText(value);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -48,8 +55,6 @@ export default function UuidGenerator() {
       </header>
 
       {/* Controls */}
-
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-card p-4 rounded-xl border border-border">
         {/* Version */}
         <div className="flex flex-col gap-2">
@@ -97,25 +102,36 @@ export default function UuidGenerator() {
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
             Kết quả
           </h2>
-          <button
-            onClick={handleCopy}
-            disabled={!output}
-            className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 disabled:opacity-40"
-          >
-            <span className="material-symbols-outlined text-sm">
-              {copied ? "check" : "content_copy"}
-            </span>
-            {copied ? "Đã copy!" : "Copy"}
-          </button>
         </div>
 
-        <div className="relative h-96">
-          <CodeEditor
-            value={output}
-            readOnly
-            className="h-full border-emerald-500/30"
-            placeholder="Nhấn Sinh để tạo UUID..."
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {outputs.map((res) => (
+            <div
+              key={res.key}
+              onClick={() => handleCopy(res.key, res.value)}
+              className="bg-card border border-border rounded-xl p-4 shadow-sm hover:border-primary/50 cursor-pointer transition-all group relative flex flex-col min-h-[5rem]"
+            >
+              <div className="flex justify-between items-start mb-2 shrink-0">
+                <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest font-semibold group-hover:text-primary transition-colors">
+                  {res.key}
+                </h3>
+                <span className={`material-symbols-outlined text-sm transition-all ${
+                  copiedKey === res.key ? "text-primary" : "text-muted-foreground opacity-0 group-hover:opacity-100"
+                }`}>
+                  {copiedKey === res.key ? "check" : "content_copy"}
+                </span>
+              </div>
+              <div className="flex-1 overflow-hidden relative">
+                {res.value ? (
+                  <pre className="font-mono text-sm text-foreground whitespace-pre-wrap break-all">
+                    {res.value}
+                  </pre>
+                ) : (
+                  <span className="opacity-30 font-mono text-sm">---</span>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

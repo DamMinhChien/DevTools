@@ -397,7 +397,7 @@ function App() {
           </nav>
 
           {/* Feedback / Contact */}
-          <div className="p-4 border-t border-border mt-auto shrink-0">
+          <div className="p-2 border-t border-border mt-auto shrink-0 pb-2">
             <button 
               onClick={() => setContactOpen(true)}
               className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group text-muted-foreground hover:bg-primary/10 hover:text-primary ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
