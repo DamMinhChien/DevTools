@@ -4,8 +4,10 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
+import confetti from "canvas-confetti";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
+import { fallingEffectConfig } from "./config/effects";
 
 function App() {
   const { theme, setTheme, isSidebarOpen, toggleSidebar, setSearchOpen, setContactOpen } = useAppStore();
@@ -34,6 +36,31 @@ function App() {
     e.preventDefault();
     setSearchOpen(true);
   });
+
+  const triggerFallingEffect = () => {
+    const end = Date.now() + fallingEffectConfig.duration;
+    
+    // Create shapes from config
+    const shapes = fallingEffectConfig.emojis.map(emoji => 
+      confetti.shapeFromText({ text: emoji, scalar: fallingEffectConfig.scalar })
+    );
+
+    (function frame() {
+      confetti({
+        particleCount: 2,
+        startVelocity: 0,
+        ticks: 400,
+        gravity: 0.4,
+        origin: { x: Math.random(), y: -0.1 },
+        shapes: shapes,
+        disableForReducedMotion: true
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }());
+  };
 
   let pageTitle = "Trang chủ";
   if (location.pathname === '/case-converter') pageTitle = "Chuyển đổi kiểu chữ";
@@ -331,6 +358,14 @@ function App() {
 
             {/* Right Actions */}
             <div className="flex items-center gap-2">
+              <button
+                className="p-2 hover:bg-muted rounded-md transition-colors group flex items-center justify-center text-xl"
+                onClick={triggerFallingEffect}
+                title="Bấm để chill"
+              >
+                {fallingEffectConfig.emojis[0]}
+              </button>
+              
               <button
                 className="p-2 hover:bg-muted rounded-md transition-colors group flex items-center justify-center"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
