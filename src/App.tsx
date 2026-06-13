@@ -278,7 +278,7 @@ function App() {
               </button>
             </SimpleTooltip>
           </div>
-        </motion.aside>
+        </aside>
 
         {/* Main Content Shell */}
         <div 
@@ -360,7 +360,7 @@ function App() {
           <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-muted/20">
             <Outlet />
           </main>
-        </motion.div>
+        </div>
       </div>
 
       {/* Global Modals */}
