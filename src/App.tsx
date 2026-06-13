@@ -58,6 +58,7 @@ function App() {
   else if (location.pathname === '/hash-generator') pageTitle = "Hash Generator";
   else if (location.pathname === '/jwt') pageTitle = "JWT Encoder/Decoder";
   else if (location.pathname === '/code-formatter') pageTitle = "Code Formatter";
+  else if (location.pathname === '/uuid-generator') pageTitle = "UUID Generator";
 
   return (
     <>
@@ -353,6 +354,29 @@ function App() {
                     )}
                   </AnimatePresence>
                 </Link>
+
+                <Link
+                  to="/uuid-generator"
+                  className={`w-full flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors group ${isSidebarOpen ? "justify-start gap-3" : "justify-center"}`}
+                  activeProps={{ className: "bg-primary text-primary-foreground shadow-md shadow-primary/20" }}
+                  inactiveProps={{ className: "text-muted-foreground hover:bg-muted hover:text-foreground" }}
+                  title="UUID Generator"
+                >
+                  <motion.span layout className="material-symbols-outlined shrink-0 text-lg">fingerprint</motion.span>
+                  <AnimatePresence>
+                    {isSidebarOpen && (
+                      <motion.span 
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="truncate"
+                      >
+                        UUID Generator
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Link>
               </div>
             </div>
           </nav>
@@ -396,7 +420,7 @@ function App() {
               {/* Sidebar Toggle Button */}
               <button 
                 onClick={toggleSidebar}
-                className="p-2 hover:bg-muted rounded-md transition-colors text-muted-foreground hover:text-foreground"
+                className="p-2 hover:bg-muted rounded-md transition-colors text-muted-foreground hover:text-foreground hidden md:block"
                 title="Đóng/Mở Sidebar (Cmd+B)"
               >
                 <span className="material-symbols-outlined">

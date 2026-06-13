@@ -106,6 +106,15 @@ export const toolCategories: Category[] = [
         color: "bg-purple-500",
         disabled: true,
         keywords: ["regex", "biểu thức", "chính quy", "test", "match"]
+      },
+      {
+        id: "uuid-generator",
+        name: "UUID Generator",
+        description: "Sinh mã UUID v4 và v7 ngẫu nhiên với nhiều định dạng.",
+        icon: "fingerprint",
+        color: "bg-teal-500",
+        disabled: false,
+        keywords: ["uuid", "guid", "generator", "sinh", "tạo", "random", "v4", "v7"]
       }
     ]
   }

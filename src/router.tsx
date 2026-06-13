@@ -11,6 +11,7 @@ import Base64Converter from "./pages/encoders/base64";
 import HashGenerator from "./pages/encoders/hash-generator";
 import JwtDecoder from "./pages/encoders/jwt";
 import CodeFormatter from "./pages/formatter";
+import UuidGenerator from "./pages/uuid";
 
 // Create root route with App as component
 const rootRoute = createRootRoute({
@@ -60,6 +61,12 @@ const codeFormatterRoute = createRoute({
   component: CodeFormatter,
 });
 
+const uuidRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/uuid-generator",
+  component: UuidGenerator,
+});
+
 // Build route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -69,6 +76,7 @@ const routeTree = rootRoute.addChildren([
   hashGeneratorRoute,
   jwtRoute,
   codeFormatterRoute,
+  uuidRoute,
 ]);
 
 // Create and export router instance

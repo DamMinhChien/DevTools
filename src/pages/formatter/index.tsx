@@ -408,37 +408,36 @@ export default function CodeFormatter() {
         ))}
       </div>
 
-      {/* Language Selector (chỉ hiện ở paste mode) - Grouped */}
+      {/* Language Selector (chỉ hiện ở paste mode) - Combo Boxes */}
       {mode === "paste" && (
-        <div className="space-y-2">
+        <div className="flex flex-wrap gap-4 items-center bg-card p-3 rounded-xl border border-border">
           {Object.entries(LANG_GROUPS).map(([group, keys]) => (
-            <div key={group} className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest w-16 shrink-0">
+            <div key={group} className="flex flex-col gap-1 min-w-[140px] flex-1">
+              <label className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest pl-1">
                 {group}
-              </span>
-              <div className="flex flex-wrap gap-1.5">
+              </label>
+              <select
+                value={keys.includes(lang) ? lang : ""}
+                onChange={(e) => {
+                  if (e.target.value) setLang(e.target.value);
+                }}
+                className={`w-full appearance-none bg-muted/50 border rounded-lg px-3 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 ${
+                  keys.includes(lang)
+                    ? "border-primary/50 text-foreground shadow-sm bg-primary/5"
+                    : "border-border text-muted-foreground hover:border-primary/30"
+                }`}
+              >
+                <option value="" disabled>-- Chọn --</option>
                 {keys.map((key) => {
                   const c = LANG_CONFIGS[key];
                   if (!c) return null;
                   return (
-                    <button
-                      key={key}
-                      onClick={() => setLang(key)}
-                      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition-all ${
-                        lang === key
-                          ? "border-primary bg-primary/10 text-primary shadow-sm"
-                          : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
-                      }`}
-                    >
-                      <span className={`w-2 h-2 rounded-full shrink-0 ${c.color}`} />
-                      {c.label}
-                      {c.engine !== "prettier" && (
-                        <span className="text-[9px] opacity-50 font-normal">basic</span>
-                      )}
-                    </button>
+                    <option key={key} value={key}>
+                      {c.label} {c.engine !== "prettier" && c.engine !== "sql" ? "(basic)" : ""}
+                    </option>
                   );
                 })}
-              </div>
+              </select>
             </div>
           ))}
         </div>
