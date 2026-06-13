@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAppStore } from "./store/useAppStore";
 import { useHotkeys } from "react-hotkeys-hook";
 import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import TextCaseConverter from "./pages/text/case-converter";
 import DiffChecker from "./pages/text/diff-checker";
 import Base64Converter from "./pages/encoders/base64";
@@ -30,8 +31,19 @@ function App() {
     toggleSidebar();
   });
 
+  let pageTitle = "Trang chủ";
+  if (activeToolId === 'case-converter') pageTitle = "Chuyển đổi kiểu chữ";
+  else if (activeToolId === 'diff-checker') pageTitle = "Diff Checker";
+  else if (activeToolId === 'base64') pageTitle = "Base64 Encoder";
+  else if (activeToolId === 'hash-generator') pageTitle = "Hash Generator";
+  else if (activeToolId === 'jwt') pageTitle = "JWT Encoder/Decoder";
+
   return (
-    <div className="flex h-screen bg-background text-foreground font-display overflow-hidden">
+    <>
+      <Helmet>
+        <title>{pageTitle} | DevTools</title>
+      </Helmet>
+      <div className="flex h-screen bg-background text-foreground font-display overflow-hidden">
       {/* Sidebar */}
       <motion.aside 
         layout
@@ -349,6 +361,7 @@ function App() {
         </main>
       </motion.div>
     </div>
+    </>
   );
 }
 
