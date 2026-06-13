@@ -23,48 +23,56 @@ const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: Home,
+  staticData: { title: "Trang chủ" },
 });
 
 const caseConverterRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/case-converter",
   component: TextCaseConverter,
+  staticData: { title: "Chuyển đổi kiểu chữ" },
 });
 
 const diffCheckerRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/diff-checker",
   component: DiffChecker,
+  staticData: { title: "Diff Checker" },
 });
 
 const base64Route = createRoute({
   getParentRoute: () => rootRoute,
   path: "/base64",
   component: Base64Converter,
+  staticData: { title: "Base64 Encoder" },
 });
 
 const hashGeneratorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/hash-generator",
   component: HashGenerator,
+  staticData: { title: "Hash Generator" },
 });
 
 const jwtRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/jwt",
   component: JwtDecoder,
+  staticData: { title: "JWT Encoder/Decoder" },
 });
 
 const codeFormatterRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/code-formatter",
   component: CodeFormatter,
+  staticData: { title: "Code Formatter" },
 });
 
 const uuidRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/uuid-generator",
   component: UuidGenerator,
+  staticData: { title: "UUID Generator" },
 });
 
 // Build route tree
@@ -86,5 +94,8 @@ export const router = createRouter({ routeTree });
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
+  }
+  interface StaticDataRouteOption {
+    title?: string;
   }
 }

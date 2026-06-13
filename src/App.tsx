@@ -3,7 +3,7 @@ import { useAppStore } from "./store/useAppStore";
 import { useHotkeys } from "react-hotkeys-hook";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { Link, Outlet, useLocation } from "@tanstack/react-router";
+import { Link, Outlet, useMatches } from "@tanstack/react-router";
 import { useSwipeable } from "react-swipeable";
 import { useResponsiveSidebar } from "./hooks/useResponsiveSidebar";
 import CommandPalette from "./components/CommandPalette";
@@ -12,7 +12,7 @@ import FallingEffect from "./components/FallingEffect";
 
 function App() {
   const { theme, setTheme, isSidebarOpen, toggleSidebar, setSidebarOpen, setSearchOpen, setContactOpen, isFallingEffectActive, toggleFallingEffect } = useAppStore();
-  const location = useLocation();
+  const matches = useMatches();
 
   // Apply responsive default states
   useResponsiveSidebar();
@@ -51,14 +51,9 @@ function App() {
 
 
 
-  let pageTitle = "Trang chủ";
-  if (location.pathname === '/case-converter') pageTitle = "Chuyển đổi kiểu chữ";
-  else if (location.pathname === '/diff-checker') pageTitle = "Diff Checker";
-  else if (location.pathname === '/base64') pageTitle = "Base64 Encoder";
-  else if (location.pathname === '/hash-generator') pageTitle = "Hash Generator";
-  else if (location.pathname === '/jwt') pageTitle = "JWT Encoder/Decoder";
-  else if (location.pathname === '/code-formatter') pageTitle = "Code Formatter";
-  else if (location.pathname === '/uuid-generator') pageTitle = "UUID Generator";
+  // Lấy title từ staticData của route con cuối cùng (deepest match)
+  const currentMatch = matches[matches.length - 1];
+  const pageTitle = (currentMatch?.staticData?.title as string) || "DevTools";
 
   return (
     <>
